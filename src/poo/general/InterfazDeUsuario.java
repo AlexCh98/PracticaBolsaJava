@@ -6,7 +6,7 @@ import poo.Excepciones.NoEsEnteroExcepcion;
 public class InterfazDeUsuario {
     private int opcion;
 
-    public InterfazDeUsuario(int opcion) {
+    public InterfazDeUsuario() {
         imprimrMenu();
         Escaner escaner = new Escaner();
         boolean sinError = false;
