@@ -21,7 +21,7 @@ public class InterfazDeUsuario {
             } catch (NoEsEnteroExcepcion | FueraRangoExcepcion | IOException e) {
                 System.out.println(e.getMessage());
             }
-        }while(!sinError);
+        }while(!sinError);//Bucle para preguntar hasta que no de errores
         switch (opcion){
             case 0: /*salir*/ break;
             case 1: /*salir*/ break;

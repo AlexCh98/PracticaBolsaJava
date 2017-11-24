@@ -30,7 +30,7 @@ public class Escaner {
             throw new NoEsEnteroExcepcion("No es un entero");
         } catch (IOException e) {
             throw  new IOException("Ha habido un error con la lectra de la entrada");
-        } finally{
+        } finally{//lo vaciamos
             br.mark(0);
             br.reset();
         }
