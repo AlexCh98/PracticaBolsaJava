@@ -4,10 +4,10 @@ import poo.Excepciones.FueraRangoExcepcion;
 import poo.Excepciones.NoEsEnteroExcepcion;
 
 public class InterfazDeUsuario {
-    private int opcion;
 
     public InterfazDeUsuario() {
         imprimrMenu();
+        int opcion = 0;
         Escaner escaner = new Escaner();
         boolean sinError = false;
         do{
