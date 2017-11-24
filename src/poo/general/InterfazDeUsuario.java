@@ -1,5 +1,8 @@
 package poo.general;
 
+import poo.Excepciones.FueraRangoExcepcion;
+import poo.Excepciones.NoEsEnteroExcepcion;
+
 public class InterfazDeUsuario {
     private int opcion;
     private Escaner escaner;
@@ -30,6 +33,15 @@ public class InterfazDeUsuario {
         System.out.println("17.- Imprimir operaciones pendientes");
         System.out.println("18.- Ejecutar operaciones pendientes");
 
+        System.out.print("Introduzca la opción a ejecutar : ");
+        /*Poner menu en otro método, porque no puede bloquearse si no metes opcion correcta*/
+        escaner = new Escaner();
+        try {
+            opcion = escaner.leerEntero();
+            if (opcion<0||opcion>18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
+        } catch (NoEsEnteroExcepcion | FueraRangoExcepcion e) {
+            System.out.println(e.getMessage());
+        }
         switch (opcion){
             case 0: /*salir*/ break;
             case 1: /*salir*/ break;
@@ -50,7 +62,6 @@ public class InterfazDeUsuario {
             case 16: /*salir*/ break;
             case 17: /*salir*/ break;
             case 18: /*salir*/ break;
-
         }
     }
 }
