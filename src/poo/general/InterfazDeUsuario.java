@@ -3,20 +3,22 @@ package poo.general;
 import poo.Excepciones.FueraRangoExcepcion;
 import poo.Excepciones.NoEsEnteroExcepcion;
 
+import java.io.IOException;
+
 public class InterfazDeUsuario {
 
     public InterfazDeUsuario() {
         imprimrMenu();
         int opcion = 0;
-        Escaner escaner = new Escaner();
         boolean sinError = false;
         do{
             System.out.print("Introduzca la opción a ejecutar : ");
             try {
+                Escaner escaner = new Escaner();
                 opcion = escaner.leerEntero();
                 if (opcion < 0||opcion > 18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
                 sinError = true;
-            } catch (NoEsEnteroExcepcion | FueraRangoExcepcion e) {
+            } catch (NoEsEnteroExcepcion | FueraRangoExcepcion | IOException e) {
                 System.out.println(e.getMessage());
             }
         }while(!sinError);
