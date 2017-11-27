@@ -18,7 +18,7 @@ public class InterfazDeUsuario {
                 opcion = escaner.leerEntero();
                 if (opcion < 0||opcion > 18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
                 sinError = true;
-            } catch (NoEsEnteroExcepcion | FueraRangoExcepcion | IOException e) {
+            } catch (NoEsEnteroExcepcion | FueraRangoExcepcion e) {
                 System.out.println(e.getMessage());
             }
         }while(!sinError);//Bucle para preguntar hasta que no de errores
