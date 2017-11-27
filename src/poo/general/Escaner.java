@@ -1,8 +1,7 @@
 package poo.general;
 
 import poo.Excepciones.NoEsEnteroExcepcion;
-
-import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Escaner {
@@ -12,14 +11,15 @@ public class Escaner {
 
     public Escaner (){
         this.sc = new Scanner(System.in);
+        sc.useDelimiter("\\R");
     }
 
-    public int leerEntero () throws NoEsEnteroExcepcion{ String cadena = null;
+    public int leerEntero () throws NoEsEnteroExcepcion{
         int entero = 0;
         try {
-            cadena = sc.nextLine();
-            entero = Integer.parseInt(cadena);
-        } catch (NumberFormatException e) {
+            entero = sc.nextInt();
+        } catch (InputMismatchException e) {
+            sc.next();
             throw new NoEsEnteroExcepcion("No es un entero");
         }
         return entero;
