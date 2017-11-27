@@ -6,13 +6,13 @@ import poo.Excepciones.NoEsEnteroExcepcion;
 import java.io.IOException;
 
 public class InterfazDeUsuario {
-
     public InterfazDeUsuario() {
-        imprimrMenu();
+        //imprimrMenu();
         int opcion = 0;
         boolean sinError = false;
+        imprimrMenu();
         do{
-            System.out.print("Introduzca la opción a ejecutar : ");
+            System.out.println("Introduzca la opción a ejecutar : ");
             try {
                 Escaner escaner = new Escaner();
                 opcion = escaner.leerEntero();
