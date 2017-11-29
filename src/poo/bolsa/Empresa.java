@@ -1,19 +1,44 @@
 package poo.bolsa;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
-public class Empresa {
+public class Empresa implements Serializable{
     private String nombreEmpresa;
     private double valorActual;
     private double valorPrevio;
 
-    public Empresa(String nombreEmpresa, double valor) {
+    public Empresa(String nombreEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public Empresa(String nombreEmpresa, double valor) {
+        this(nombreEmpresa);
         this.valorPrevio=valor;
         this.valorActual=valor;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public double getValorActual() {
+        return valorActual;
+    }
+
+    public void setValorActual(double valorActual) {
+        this.valorActual = valorActual;
+    }
+
+    public double getValorPrevio() {
+        return valorPrevio;
+    }
+
+    public void setValorPrevio(double valorPrevio) {
+        this.valorPrevio = valorPrevio;
     }
 
     private void calcularValorPrevio (double valor){
@@ -39,4 +64,10 @@ public class Empresa {
         oos.writeObject(empresa);
         oos.close();
     }
+    private Empresa deserializar (FileInputStream file) throws IOException, ClassCastException, ClassNotFoundException{//alguna vaina que devuelva empresa y reciba un serializado/ Empresa empresa File file) throws ioexception{
+
+        ObjectInputStream entrada = new ObjectInputStream (file);
+        Empresa empresa = (Empresa) entrada.readObject();
+        entrada.close();
+        return empresa;}
 }
