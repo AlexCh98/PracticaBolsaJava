@@ -3,7 +3,7 @@ package poo.banco;
 import java.util.ArrayList;
 
 public class Cliente extends Persona{
-    private Float saldo;
+    private float saldo;
     private ArrayList<PaqueteDeAcciones> carteraDeAcciones;
 
     public Cliente(String nombre, String dni, Float saldo) {
@@ -35,7 +35,24 @@ public class Cliente extends Persona{
         return dni;
     }
 
+    public Float getSaldo() {
+        return saldo;
+    }
+
     public void setCarteraDeAcciones(ArrayList<PaqueteDeAcciones> carteraDeAcciones) {
         this.carteraDeAcciones = carteraDeAcciones;
+    }
+
+    public Cliente copiarCliente(){
+        Cliente clienteSalida = new Cliente(this.nombre, this.dni, this.saldo);
+        if (!this.carteraDeAcciones.isEmpty()){
+            for(PaqueteDeAcciones paquete : carteraDeAcciones){
+                clienteSalida.añadirPaqueteDeAciones(paquete);
+            }
+        }else{
+
+            this.carteraDeAcciones = new ArrayList<>();
+        }
+        return clienteSalida;
     }
 }
