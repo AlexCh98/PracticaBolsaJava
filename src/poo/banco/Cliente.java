@@ -31,6 +31,10 @@ public class Cliente extends Persona{
         this.saldo = saldo;
     }
 
+    public String getDni() {
+        return dni;
+    }
+
     public void setCarteraDeAcciones(ArrayList<PaqueteDeAcciones> carteraDeAcciones) {
         this.carteraDeAcciones = carteraDeAcciones;
     }
