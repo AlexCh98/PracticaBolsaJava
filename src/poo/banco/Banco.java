@@ -1,7 +1,7 @@
 package poo.banco;
 
 import poo.Excepciones.ClienteNoEncontradoExcepcion;
-
+import poo.Excepciones.ClienteYaEstaExcepcion;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,10 +17,10 @@ public class Banco {
         Cliente clienteCopia = cliente.copiarCliente();
         this.clientes.put(dni, clienteCopia);
     }
-    public void anadirCliente(Cliente cliente)throws ClienteNoEncontradoExcepcion {
+    public void anadirCliente(Cliente cliente)throws ClienteYaEstaExcepcion {
         String dni = cliente.getDni();
         Cliente clienteCopia = cliente.copiarCliente();
-        if (!this.clientes.containsKey(dni)) throw new ClienteNoEncontradoExcepcion();
+        if (this.clientes.containsKey(dni)) throw new ClienteYaEstaExcepcion();
         this.clientes.put(dni, clienteCopia);
     }
 
@@ -47,6 +47,11 @@ public class Banco {
         ClientePremium clientePremium = new ClientePremium(cliente.getNombre(), cliente.getDni(),
                 cliente.getSaldo(), nombreGestorInversores);
         clientePremium.setCarteraDeAcciones(cliente.getCarteraDeAcciones());
-        this.anadirCliente(clientePremium);
+        try {
+            this.anadirCliente(clientePremium);
+        } catch (ClienteYaEstaExcepcion clienteYaEstaExcepcion) {
+            // No da nunca esta excepcion, pongo catch para que no de error el intellije idea
+        }
+
     }
 }
