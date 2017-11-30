@@ -11,6 +11,11 @@ public class Empresa implements Serializable{
         this.nombreEmpresa = nombreEmpresa;
     }
 
+    public Empresa(String nombreEmpresa, double valorActual, double valorPrevio) {
+        this(nombreEmpresa);
+        this.valorPrevio=valorPrevio;
+        this.valorActual=valorActual;
+    }
     public Empresa(String nombreEmpresa, double valor) {
         this(nombreEmpresa);
         this.valorPrevio=valor;
@@ -59,15 +64,5 @@ public class Empresa implements Serializable{
         return (new StringBuilder("Nombre: " + this.nombreEmpresa  + ", Valor Actual " + this.valorActual+", Valor Previo "+this.valorPrevio).toString());
     }
 
-    private void serializar (Empresa empresa,FileOutputStream file) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(file);
-        oos.writeObject(empresa);
-        oos.close();
-    }
-    private Empresa deserializar (FileInputStream file) throws IOException, ClassCastException, ClassNotFoundException{//alguna vaina que devuelva empresa y reciba un serializado/ Empresa empresa File file) throws ioexception{
 
-        ObjectInputStream entrada = new ObjectInputStream (file);
-        Empresa empresa = (Empresa) entrada.readObject();
-        entrada.close();
-        return empresa;}
 }
