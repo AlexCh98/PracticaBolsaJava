@@ -49,8 +49,4 @@ public class Banco {
         clientePremium.setCarteraDeAcciones(cliente.getCarteraDeAcciones());
         this.anadirCliente(clientePremium);
     }
-
-    public String  recomendarInversion(){
-        //return empresaMayorDiferenciaAcciones();
-    }
 }
