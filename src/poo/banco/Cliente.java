@@ -12,7 +12,7 @@ public class Cliente extends Persona{
         this.carteraDeAcciones = new ArrayList<>();
     }
 
-    public void añadirPaqueteDeAciones(PaqueteDeAcciones paqueteDeAcciones){
+    public void anadirPaqueteDeAciones(PaqueteDeAcciones paqueteDeAcciones){
         carteraDeAcciones.add(paqueteDeAcciones);
     }
 
@@ -31,23 +31,24 @@ public class Cliente extends Persona{
         this.saldo = saldo;
     }
 
-    public String getDni() {
-        return dni;
-    }
-
     public Float getSaldo() {
         return saldo;
     }
 
+
     public void setCarteraDeAcciones(ArrayList<PaqueteDeAcciones> carteraDeAcciones) {
         this.carteraDeAcciones = carteraDeAcciones;
+    }
+
+    public ArrayList<PaqueteDeAcciones> getCarteraDeAcciones() {
+        return carteraDeAcciones;
     }
 
     public Cliente copiarCliente(){
         Cliente clienteSalida = new Cliente(this.nombre, this.dni, this.saldo);
         if (!this.carteraDeAcciones.isEmpty()){
             for(PaqueteDeAcciones paquete : carteraDeAcciones){
-                clienteSalida.añadirPaqueteDeAciones(paquete);
+                clienteSalida.anadirPaqueteDeAciones(paquete);
             }
         }else{
 

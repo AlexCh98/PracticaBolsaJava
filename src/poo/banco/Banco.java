@@ -1,5 +1,8 @@
 package poo.banco;
 
+import poo.Excepciones.ClienteNoEncontradoExcepcion;
+
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,19 +17,21 @@ public class Banco {
         Cliente clienteCopia = cliente.copiarCliente();
         this.clientes.put(dni, clienteCopia);
     }
-    public void anadirCliente(Cliente cliente){
+    public void anadirCliente(Cliente cliente)throws ClienteNoEncontradoExcepcion {
         String dni = cliente.getDni();
         Cliente clienteCopia = cliente.copiarCliente();
+        if (!this.clientes.containsKey(dni)) throw new ClienteNoEncontradoExcepcion();
         this.clientes.put(dni, clienteCopia);
     }
 
-    public void eliminarCliente(Cliente cliente) {
+    public void eliminarCliente(Cliente cliente) throws ClienteNoEncontradoExcepcion {
         String dni = cliente.getDni();
+        if (!this.clientes.containsKey(dni)) throw new ClienteNoEncontradoExcepcion();
         this.clientes.remove(dni);
     }
 
-    public void realizarCopiaSeguridad(){}
-    public void restaurarCopiaSeguridad(){}
+    public void realizarCopiaSeguridad(){/**/}
+    public void restaurarCopiaSeguridad(){/**/}
 
     public void imprimirClientes(){
         for(Map.Entry<String,Cliente> entry : clientes.entrySet()) {
@@ -35,10 +40,17 @@ public class Banco {
         }
     }
 
-    public void subirClienteAPremium(Cliente cliente){
-        Cliente clienteCopia = cliente.copiarCliente();
-        Clie
+    public void subirClienteAPremium(Cliente cliente, String nombreGestorInversores) throws ClienteNoEncontradoExcepcion {
+        String dni = cliente.getDni();
+        if (!this.clientes.containsKey(dni)) throw new ClienteNoEncontradoExcepcion();
+        this.clientes.remove(dni);
+        ClientePremium clientePremium = new ClientePremium(cliente.getNombre(), cliente.getDni(),
+                cliente.getSaldo(), nombreGestorInversores);
+        clientePremium.setCarteraDeAcciones(cliente.getCarteraDeAcciones());
+        this.anadirCliente(clientePremium);
     }
 
-
+    public String  recomendarInversion(){
+        //return empresaMayorDiferenciaAcciones();
+    }
 }
