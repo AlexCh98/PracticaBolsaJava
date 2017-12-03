@@ -15,13 +15,12 @@ public class Main {
         BolsaDeValores bolsa = new BolsaDeValores("IBEX",repsol);
 
         bolsa.imprimirEmpresas();
-       /*bolsa.actualizarValoresAcciones();
+       bolsa.actualizarValoresAcciones();
         bolsa.imprimirEmpresas();
 
         try {
-            System.out.println(bolsa.realizarOperacionCompra("5052|John Nash|Tesla|0003000"));
-        }catch(EmpresaNoEncontradaExcepcion e){e.getMessage();}*/
-
+            bolsa.realizarOperacionCompra("5052|John Nash|Tesla|0003000");
+        }catch(EmpresaNoEncontradaExcepcion e){e.printStackTrace();}
     }
 
 }
