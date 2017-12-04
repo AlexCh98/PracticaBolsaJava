@@ -24,4 +24,9 @@ public class PaqueteDeAcciones {
     public void actulizarPaqueteValor(double precioActulizado){
         this.valorPaquete = this.numeroDeAcciones * precioActulizado;
     }
+
+    @Override
+    public String toString() {
+        return "Empresa: "+ nombreEmpresa +" Nº de Acciones: "+ numeroDeAcciones+ " Valor del Paquete: " +valorPaquete;
+    }
 }
