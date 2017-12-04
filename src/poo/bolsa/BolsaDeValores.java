@@ -4,6 +4,7 @@ package poo.bolsa;
 import poo.Excepciones.*;
 
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
 import static poo.general.Utilidades.numeroAleatorio;
 
@@ -65,10 +66,19 @@ public class BolsaDeValores {
             Object[] numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
             /*Controlar que te devuelve la cadena bien hecha*/
             int accionesCompradas=(int) numTitulos[0];
+            double dineroSobrante=(double) numTitulos[1];
 
             this.listaEmpresas.get(this.listaEmpresas.indexOf(empresa)).valorActualEmpresa((empresa.getValorActual()*0.01)+empresa.getValorActual());
 
-            return new String(identificador+"|"+nombreCliente+"|"+(accionesCompradas!=0)+"|"+numTitulos[0]+"|"+empresa.getValorActual()+"|"+numTitulos[1]);
+            StringJoiner sj = new StringJoiner("|");
+            sj.add(Integer.toString(identificador));
+            sj.add(nombreCliente);
+            sj.add(Boolean.toString(accionesCompradas!=0));
+            sj.add(Integer.toString(accionesCompradas));
+            sj.add(Double.toString(empresa.getValorActual()));
+            sj.add(Double.toString(dineroSobrante));
+            return sj.toString();
+
 
 
     }
@@ -101,11 +111,22 @@ public class BolsaDeValores {
 
 
     }
+
+
+
+    public String realizarOperacionActualizacion(String mensaje){
+        return mensaje;
+
+    }
             public Empresa buscarEmpresa(String nombreEmpresa) throws EmpresaNoEncontradaExcepcion {
-                int posicion=this.listaEmpresas.indexOf(new Empresa(nombreEmpresa));
-                if(posicion==-1)throw new EmpresaNoEncontradaExcepcion();
-                Empresa empresa =this.listaEmpresas.get(posicion);
-                return empresa;
+                boolean encontrada=false;
+                int i=0;
+                while (!encontrada && i<this.listaEmpresas.size())    {
+                    encontrada=this.listaEmpresas.get(i).getNombreEmpresa().equals(nombreEmpresa);
+                    i++;
+                }
+                if (!encontrada) throw new EmpresaNoEncontradaExcepcion();
+                return this.listaEmpresas.get(i-1);
             }
 
             public Object[] calcularNumTitulo(double dinero,double valorActual) throws NoSePuedeComprarAccionesExcepcion {

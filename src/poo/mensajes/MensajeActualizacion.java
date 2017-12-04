@@ -7,4 +7,6 @@ public class MensajeActualizacion extends Mensaje{
         super(identificador, nombreCliente);
         this.nombreEmpresa = nombreEmpresa;
     }
+
+
 }

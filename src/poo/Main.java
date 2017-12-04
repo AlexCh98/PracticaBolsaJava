@@ -15,8 +15,8 @@ public class Main {
         BolsaDeValores bolsa = new BolsaDeValores("IBEX",repsol);
 
         bolsa.imprimirEmpresas();
-       bolsa.actualizarValoresAcciones();
-        bolsa.imprimirEmpresas();
+      /*bolsa.actualizarValoresAcciones();
+        bolsa.imprimirEmpresas();*/
 
         try {
             bolsa.realizarOperacionCompra("5052|John Nash|Tesla|0003000");
