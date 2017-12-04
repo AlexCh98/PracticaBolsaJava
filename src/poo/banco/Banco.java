@@ -2,48 +2,42 @@ package poo.banco;
 
 import poo.Excepciones.ClienteNoEncontradoExcepcion;
 import poo.Excepciones.ClienteYaEstaExcepcion;
+import poo.Excepciones.PaqueteNoEnContradoExcepcion;
+import poo.bolsa.Empresa;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ArrayList;
 
 public class Banco {
-    public String nombre;
-    public Map<String, Cliente> clientes;
+    private String nombre;
+    private ArrayList<Cliente> clientes;
 
     public Banco(String nombre, Cliente cliente) {
         this.nombre = nombre;
-        this.clientes = new TreeMap<String, Cliente>();
-        String dni = cliente.getDni();
-        Cliente clienteCopia = cliente.copiarCliente();
-        this.clientes.put(dni, clienteCopia);
+        this.clientes = new ArrayList<>();
+        this.clientes.add(cliente);
     }
     public void anadirCliente(Cliente cliente)throws ClienteYaEstaExcepcion {
-        String dni = cliente.getDni();
-        Cliente clienteCopia = cliente.copiarCliente();
-        if (this.clientes.containsKey(dni)) throw new ClienteYaEstaExcepcion();
-        this.clientes.put(dni, clienteCopia);
+        if (this.clientes.contains(cliente)) throw new ClienteYaEstaExcepcion();
+        this.clientes.add(cliente);
     }
 
     public void eliminarCliente(Cliente cliente) throws ClienteNoEncontradoExcepcion {
-        String dni = cliente.getDni();
-        if (!this.clientes.containsKey(dni)) throw new ClienteNoEncontradoExcepcion();
-        this.clientes.remove(dni);
+        if (!this.clientes.contains(cliente)) throw new ClienteNoEncontradoExcepcion();
+        this.clientes.remove(cliente);
     }
 
     public void realizarCopiaSeguridad(){/**/}
     public void restaurarCopiaSeguridad(){/**/}
 
     public void imprimirClientes(){
-        for(Map.Entry<String,Cliente> entry : clientes.entrySet()) {
-            Cliente cliente = entry.getValue();
+        for (Cliente cliente : clientes) {
             System.out.println(cliente);
         }
     }
 
     public void subirClienteAPremium(Cliente cliente, String nombreGestorInversores) throws ClienteNoEncontradoExcepcion {
-        String dni = cliente.getDni();
-        if (!this.clientes.containsKey(dni)) throw new ClienteNoEncontradoExcepcion();
-        this.clientes.remove(dni);
+        if (!this.clientes.contains(cliente)) throw new ClienteNoEncontradoExcepcion();
+        this.clientes.remove(cliente);
         ClientePremium clientePremium = new ClientePremium(cliente.getNombre(), cliente.getDni(),
                 cliente.getSaldo(), nombreGestorInversores);
         clientePremium.setCarteraDeAcciones(cliente.getCarteraDeAcciones());
@@ -52,6 +46,23 @@ public class Banco {
         } catch (ClienteYaEstaExcepcion clienteYaEstaExcepcion) {
             // No da nunca esta excepcion, pongo catch para que no de error el intellije idea
         }
+    }
+    public boolean existe(Cliente cliente){
+        return clientes.contains(cliente) ;
+    }
 
+    public boolean clienteTieneSuficienteSaldo(Cliente cliente, int saldo) {
+        return cliente.getSaldo() >= saldo;
+    }
+
+
+    public boolean comprobacionPaquete(Cliente cliente, String nombreEmpresa, int numAcciones){
+        try {
+            PaqueteDeAcciones paquete = cliente.getPaquete(nombreEmpresa);
+            return paquete.getNumeroDeAcciones() >= numAcciones;
+        }
+        catch (PaqueteNoEnContradoExcepcion e) {
+            return false;
+        }
     }
 }

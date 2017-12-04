@@ -1,5 +1,7 @@
 package poo.banco;
 
+import poo.Excepciones.PaqueteNoEnContradoExcepcion;
+
 import java.util.ArrayList;
 
 public class Cliente extends Persona{
@@ -44,16 +46,14 @@ public class Cliente extends Persona{
         return carteraDeAcciones;
     }
 
-    public Cliente copiarCliente(){
-        Cliente clienteSalida = new Cliente(this.nombre, this.dni, this.saldo);
-        if (!this.carteraDeAcciones.isEmpty()){
-            for(PaqueteDeAcciones paquete : carteraDeAcciones){
-                clienteSalida.anadirPaqueteDeAciones(paquete);
-            }
-        }else{
-
-            this.carteraDeAcciones = new ArrayList<>();
+    public PaqueteDeAcciones getPaquete(String nombreEmpresa) throws PaqueteNoEnContradoExcepcion {
+        boolean encontrada=false;
+        int i=0;
+        while (!encontrada && i<this.carteraDeAcciones.size()){
+            encontrada=this.carteraDeAcciones.get(i).getNombreEmpresa().equals(nombreEmpresa);
+            i++;
         }
-        return clienteSalida;
+        if (!encontrada) throw new PaqueteNoEnContradoExcepcion();
+        return this.carteraDeAcciones.get(i-1);
     }
 }

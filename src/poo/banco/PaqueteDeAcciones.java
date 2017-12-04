@@ -11,6 +11,14 @@ public class PaqueteDeAcciones {
         this.valorPaquete = numeroDeAcciones * precioCompra;
     }
 
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public double getNumeroDeAcciones() {
+        return numeroDeAcciones;
+    }
+
     public void actualizarPaqueteCompra(int numeroDeAcciones, double precioCompra){
         this.numeroDeAcciones = this.numeroDeAcciones + numeroDeAcciones;
         this.valorPaquete = numeroDeAcciones * precioCompra;
@@ -25,7 +33,6 @@ public class PaqueteDeAcciones {
         this.valorPaquete = this.numeroDeAcciones * precioActulizado;
     }
 
-    @Override
     public String toString() {
         return "Empresa: "+ nombreEmpresa +" Nº de Acciones: "+ numeroDeAcciones+ " Valor del Paquete: " +valorPaquete;
     }
