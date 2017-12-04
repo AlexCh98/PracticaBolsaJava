@@ -1,9 +1,9 @@
 package poo.banco;
 
 public class PaqueteDeAcciones {
-    public String nombreEmpresa;
-    public int numeroDeAcciones;
-    public double valorPaquete;
+    private String nombreEmpresa;
+    private int numeroDeAcciones;
+    private double valorPaquete;
 
     public PaqueteDeAcciones(String nombreEmpresa, int numeroDeAcciones, double precioCompra) {
         this.nombreEmpresa = nombreEmpresa;
