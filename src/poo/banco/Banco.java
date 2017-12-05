@@ -3,22 +3,20 @@ package poo.banco;
 import poo.Excepciones.ClienteNoEncontradoExcepcion;
 import poo.Excepciones.ClienteYaEstaExcepcion;
 import poo.Excepciones.PaqueteNoEnContradoExcepcion;
-import poo.bolsa.Empresa;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Banco {
     private String nombre;
-    private ArrayList<Cliente> clientes;
+    private HashSet<Cliente> clientes;
 
     public Banco(String nombre, Cliente cliente) {
         this.nombre = nombre;
-        this.clientes = new ArrayList<>();
+        this.clientes = new HashSet<>();
         this.clientes.add(cliente);
     }
     public void anadirCliente(Cliente cliente)throws ClienteYaEstaExcepcion {
-        if (this.clientes.contains(cliente)) throw new ClienteYaEstaExcepcion();
-        this.clientes.add(cliente);
+        if (!this.clientes.add(cliente)) throw new ClienteYaEstaExcepcion();
     }
 
     public void eliminarCliente(Cliente cliente) throws ClienteNoEncontradoExcepcion {
