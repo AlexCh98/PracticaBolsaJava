@@ -1,17 +1,24 @@
 package poo.bolsa;
 
 
-import poo.Excepciones.*;
-import static poo.general.Utilidades.*;
+import poo.Excepciones.EmpresaNoEncontradaExcepcion;
+import poo.Excepciones.EmpresaRepetidaExcepcion;
+import poo.Excepciones.FormatoNoValidoExcepcion;
+import poo.Excepciones.NoSePuedeComprarAccionesExcepcion;
+
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
+import static poo.general.Utilidades.numeroAleatorio;
+import static poo.general.Utilidades.deserializar;
+import static poo.general.Utilidades.redondearDecimales;
 
-public class BolsaDeValores {
+
+public class BolsaDeValoresCopia {
     public String nombreBolsa;
     public ArrayList<Empresa> listaEmpresas;
 
-    public BolsaDeValores(String nombre,Empresa empresa) {
+    public BolsaDeValoresCopia(String nombre, Empresa empresa) {
         this.nombreBolsa = nombre;
         this.listaEmpresas = new ArrayList<>();
         this.listaEmpresas.add(empresa);
@@ -46,27 +53,17 @@ public class BolsaDeValores {
 
 
     public String realizarOperacionCompra (String mensaje) throws FormatoNoValidoExcepcion,EmpresaNoEncontradaExcepcion,NoSePuedeComprarAccionesExcepcion {
-        String[] fields = mensaje.split("\\|"); // "99|entero"
-                /*  fields[0] = "99";
-                    fields[1] = "entero";
-                 */
-            int identificador = 0;
-            String nombreEmpresa = null;
-            double dinero = 0;
-            String nombreCliente = null;
-            if (fields.length<4) throw new FormatoNoValidoExcepcion();
-            try{
-                 identificador = Integer.parseInt(fields[0]);
-                 nombreCliente = fields[1];
-                 nombreEmpresa = fields[2];
-                 dinero = Double.parseDouble(fields[3]);
-            } catch (NumberFormatException e){
-                    throw new FormatoNoValidoExcepcion();
-            }
-            //CONTROLAMOS QUE EL DINERO NO SEA CERO EN EL BANCO
-            Empresa empresa = buscarEmpresa(nombreEmpresa);
-            Object[] numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
-            /*Controlar que te devuelve la cadena bien hecha*/
+        Object[] camposMensaje=deserializar(mensaje,4);
+        int identificador = Integer.parseInt((String)camposMensaje[0]);
+        String nombreCliente = (String) camposMensaje[1];
+        String nombreEmpresa = (String) camposMensaje[2];
+        double dinero = Double.parseDouble((String)camposMensaje[3]);
+
+
+
+        Empresa empresa = buscarEmpresa(nombreEmpresa);
+        Object[] numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
+        /*Controlar que te devuelve la cadena bien hecha*/
             int accionesCompradas=(int) numTitulos[0];
             double dineroSobrante=(double) numTitulos[1];
 
@@ -86,23 +83,13 @@ public class BolsaDeValores {
     }
 
     public String realizarOperacionVenta (String mensaje) throws FormatoNoValidoExcepcion,EmpresaNoEncontradaExcepcion,NoSePuedeComprarAccionesExcepcion {
-        String[] fields = mensaje.split("\\|"); // "99|entero"
-                /*  fields[0] = "99";
-                    fields[1] = "entero";
-                 */
-        int identificador = 0;
-        String nombreEmpresa = null;
-        int numAccionesVenta = 0;
-        String nombreCliente = null;
-        if (fields.length<4) throw new FormatoNoValidoExcepcion();
-        try{
-            identificador = Integer.parseInt(fields[0]);
-            nombreCliente = fields[1];
-            nombreEmpresa = fields[2];
-            numAccionesVenta =  Integer.parseInt(fields[3]);
-        } catch (NumberFormatException e){
-            throw new FormatoNoValidoExcepcion();
-        }
+        Object[] camposMensaje=deserializar(mensaje,4);
+
+            int identificador = Integer.parseInt((String) camposMensaje[0]);
+            String nombreCliente = (String) camposMensaje[1];
+            String nombreEmpresa = (String) camposMensaje[2];
+            int numAccionesVenta = Integer.parseInt((String) camposMensaje[3]);
+
 
         Empresa empresa = buscarEmpresa(nombreEmpresa);
         Double dineroRecibido =empresa.getValorActual()*numAccionesVenta;

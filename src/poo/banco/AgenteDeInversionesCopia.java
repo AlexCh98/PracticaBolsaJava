@@ -3,23 +3,23 @@ package poo.banco;
 import poo.Excepciones.EmpresaNoEncontradaExcepcion;
 import poo.Excepciones.FormatoNoValidoExcepcion;
 import poo.Excepciones.NoSePuedeComprarAccionesExcepcion;
-import poo.bolsa.BolsaDeValores;
+
 import poo.bolsa.BolsaDeValoresCopia;
 import poo.mensajes.*;
 
 import java.util.ArrayList;
 
-public class AgenteDeInversiones {
+public class AgenteDeInversionesCopia {
     private Banco banco;
-    private BolsaDeValores bolsa;
+    private BolsaDeValoresCopia bolsa;
     private ArrayList<Mensaje> listaPeticiones;
 
-    public AgenteDeInversiones(Banco banco,BolsaDeValores bolsa) {
+    public AgenteDeInversionesCopia(Banco banco, BolsaDeValoresCopia bolsa) {
         this.banco=banco;
         this.bolsa=bolsa;
         this.listaPeticiones = new ArrayList<>();
     }
-    public AgenteDeInversiones(BolsaDeValores bolsa) {
+    public AgenteDeInversionesCopia(BolsaDeValoresCopia bolsa) {
         this.bolsa=bolsa;
         this.listaPeticiones = new ArrayList<>();
     }
