@@ -6,6 +6,8 @@ import poo.Excepciones.EmpresaRepetidaExcepcion;
 import poo.Excepciones.FormatoNoValidoExcepcion;
 import poo.Excepciones.NoSePuedeComprarAccionesExcepcion;
 
+import java.io.*;
+import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
@@ -40,12 +42,84 @@ public class BolsaDeValoresCopia {
         }
     }
 
-    public void realizarCopiaSeguridad(){
-        //HACER COPIA DE SEGURIDAD
-    }
+    public void realizarCopiaSeguridad() {
+        try {
+            FileOutputStream fos = new FileOutputStream("Bolsa.dat");
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            DataOutputStream dos = new DataOutputStream(bos);
 
+            dos.writeUTF(this.nombreBolsa);
+            for (Empresa e: this.listaEmpresas){
+                dos.writeUTF(e.getNombreEmpresa());
+                dos.writeDouble(e.getValorActual());
+                dos.writeDouble(e.getValorPrevio());
+            }
+            dos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*try
+        {
+            FileOutputStream fos = new FileOutputStream("Bolsa.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            // se escriben dos objetos de la clase Persona
+            for (Empresa e: this.listaEmpresas){
+                oos.writeObject(e);
+            }
+
+            oos.close();
+            System.out.println("finalizado");
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("¡El fichero no existe!");
+        } catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        } catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }*/
+        System.out.println("COPIA CON EXITOO");
+    }
     public void restaurarCopiaSeguridad(){
-        //HACER COPIA DE SEGURIDAD
+        try{
+            FileInputStream fis = new FileInputStream ("Bolsa.dat");
+            BufferedInputStream bis = new BufferedInputStream(fis);
+            DataInputStream dis = new DataInputStream(bis);
+            int max=this.listaEmpresas.size();
+            for (int i=0;i<max;i++){
+                this.listaEmpresas.remove(0);
+            }
+            this.nombreBolsa= dis.readUTF();
+            try{
+                while(fis!=null){
+                    this.listaEmpresas.add(new Empresa(dis.readUTF(),dis.readDouble(),dis.readDouble()));
+                }
+            }catch(IOException e){
+                fis.close();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*{
+            try {
+                FileInputStream fis = new FileInputStream("Bolsa.dat");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                this.nombreBolsa =  ois.readUTF();
+                this.listaEmpresas.add((Empresa)ois.readObject());
+                // se cierra el flujo de objetos objetoEntrada
+                ois.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("¡El fichero no existe!");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            };*/
     }
     /*5052|John Nash|Tesla|0003000.00*/
 
@@ -53,11 +127,11 @@ public class BolsaDeValoresCopia {
 
 
     public String realizarOperacionCompra (String mensaje) throws FormatoNoValidoExcepcion,EmpresaNoEncontradaExcepcion,NoSePuedeComprarAccionesExcepcion {
-        Object[] camposMensaje=deserializar(mensaje,4);
-        int identificador = Integer.parseInt((String)camposMensaje[0]);
+        Object[] camposMensaje=deserializar(mensaje,4,"Compra");
+        int identificador = (Integer) camposMensaje[0];
         String nombreCliente = (String) camposMensaje[1];
         String nombreEmpresa = (String) camposMensaje[2];
-        double dinero = Double.parseDouble((String)camposMensaje[3]);
+        double dinero = (Double) camposMensaje[3];
 
 
 
@@ -83,12 +157,12 @@ public class BolsaDeValoresCopia {
     }
 
     public String realizarOperacionVenta (String mensaje) throws FormatoNoValidoExcepcion,EmpresaNoEncontradaExcepcion,NoSePuedeComprarAccionesExcepcion {
-        Object[] camposMensaje=deserializar(mensaje,4);
+        Object[] camposMensaje=deserializar(mensaje,4,"Venta");
 
-            int identificador = Integer.parseInt((String) camposMensaje[0]);
+            int identificador = (Integer) camposMensaje[0];
             String nombreCliente = (String) camposMensaje[1];
             String nombreEmpresa = (String) camposMensaje[2];
-            int numAccionesVenta = Integer.parseInt((String) camposMensaje[3]);
+            int numAccionesVenta = (Integer) camposMensaje[3];
 
 
         Empresa empresa = buscarEmpresa(nombreEmpresa);
