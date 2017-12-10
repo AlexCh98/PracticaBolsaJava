@@ -11,17 +11,16 @@ public class Main {
 
     public static void main(String[] args) throws EmpresaNoEncontradaExcepcion,FormatoNoValidoExcepcion,NoSePuedeComprarAccionesExcepcion {
         InterfazDeUsuario interfaz = new InterfazDeUsuario();
-        Empresa repsol = new Empresa("Repsol",1.02f);
+        Empresa repsol = new Empresa("Repsol",1.02);
         BolsaDeValores bolsa = new BolsaDeValores("IBEX",repsol);
-        bolsa.añadirEmpresa(repsol);
+
         bolsa.imprimirEmpresas();
-        bolsa.actualizarValoresAcciones();
-        bolsa.imprimirEmpresas();
+      /*bolsa.actualizarValoresAcciones();
+        bolsa.imprimirEmpresas();*/
 
         try {
-            System.out.println(bolsa.realizarOperacion("5052|John Nash|Tesla|0003000.00"));
-        }catch(EmpresaNoEncontradaExcepcion e){e.getMessage();}
-
+            bolsa.realizarOperacionCompra("5052|John Nash|Tesla|0003000");
+        }catch(EmpresaNoEncontradaExcepcion e){e.printStackTrace();}
     }
 
 }
