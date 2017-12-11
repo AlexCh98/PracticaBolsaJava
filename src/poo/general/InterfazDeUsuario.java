@@ -6,6 +6,7 @@ import poo.Excepciones.NoEsEnteroExcepcion;
 import java.io.IOException;
 
 public class InterfazDeUsuario {
+    private int opcion;
     public InterfazDeUsuario() {
         //imprimrMenu();
         int opcion = 0;
@@ -16,34 +17,19 @@ public class InterfazDeUsuario {
             try {
                 Escaner escaner = new Escaner();
                 opcion = escaner.leerEntero();
-                if (opcion < 0||opcion > 18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
+                if (opcion <= 0||opcion >= 18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
                 sinError = true;
             } catch (NoEsEnteroExcepcion | FueraRangoExcepcion e) {
                 System.out.println(e.getMessage());
             }
         }while(!sinError);//Bucle para preguntar hasta que no de errores
-        switch (opcion){
-            case 0: /*salir*/ break;
-            case 1: /*salir*/ break;
-            case 2: /*salir*/ break;
-            case 3: /*salir*/ break;
-            case 4: /*salir*/ break;
-            case 5: /*salir*/ break;
-            case 6: /*salir*/ break;
-            case 7: /*salir*/ break;
-            case 8: /*salir*/ break;
-            case 9: /*salir*/ break;
-            case 10: /*salir*/ break;
-            case 11: /*salir*/ break;
-            case 12: /*salir*/ break;
-            case 13: /*salir*/ break;
-            case 14: /*salir*/ break;
-            case 15: /*salir*/ break;
-            case 16: /*salir*/ break;
-            case 17: /*salir*/ break;
-            case 18: /*salir*/ break;
-        }
+        this.opcion = opcion;
     }
+
+    public int getOpcion() {
+        return opcion;
+    }
+
     public void imprimrMenu(){
         System.out.println("0.- Salir");
         System.out.println("------------ESTADO------------");
