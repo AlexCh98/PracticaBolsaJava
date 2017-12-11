@@ -6,7 +6,7 @@ public class MensajeCompra extends Mensaje {
     protected double dinero;
     protected String nombreEmpresa;
 
-    public MensajeCompra(int identificador, String nombreCliente, String nombreEmpresa, int dinero) {
+    public MensajeCompra(int identificador, String nombreCliente, String nombreEmpresa, double dinero) {
         super(identificador, nombreCliente);
         this.nombreEmpresa = nombreEmpresa;
         this.dinero = dinero;

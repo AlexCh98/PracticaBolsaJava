@@ -6,7 +6,7 @@ public class ClientePremium extends Cliente{
 
 
 
-    public ClientePremium(String nombre, String dni, Float saldo, String nombreGestorInversores) {
+    public ClientePremium(String nombre, String dni, Double saldo, String nombreGestorInversores) {
         super(nombre, dni, saldo);
         this.nombreGestorInversores = nombreGestorInversores;
     }

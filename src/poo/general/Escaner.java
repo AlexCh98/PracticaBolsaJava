@@ -1,7 +1,11 @@
 package poo.general;
 
+import poo.Excepciones.NoEsClienteExcepcion;
 import poo.Excepciones.NoEsEnteroExcepcion;
+import poo.banco.Cliente;
+
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Escaner {
@@ -24,6 +28,7 @@ public class Escaner {
         }
         return entero;
     }
+
 
 
 }

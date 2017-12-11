@@ -1,14 +1,22 @@
 package poo.banco;
 
 public class PaqueteDeAcciones {
-    public String nombreEmpresa;
-    public int numeroDeAcciones;
-    public double valorPaquete;
+    private String nombreEmpresa;
+    private int numeroDeAcciones;
+    private double valorPaquete;
 
     public PaqueteDeAcciones(String nombreEmpresa, int numeroDeAcciones, double precioCompra) {
         this.nombreEmpresa = nombreEmpresa;
         this.numeroDeAcciones = numeroDeAcciones;
         this.valorPaquete = numeroDeAcciones * precioCompra;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public double getNumeroDeAcciones() {
+        return numeroDeAcciones;
     }
 
     public void actualizarPaqueteCompra(int numeroDeAcciones, double precioCompra){
@@ -23,5 +31,9 @@ public class PaqueteDeAcciones {
 
     public void actulizarPaqueteValor(double precioActulizado){
         this.valorPaquete = this.numeroDeAcciones * precioActulizado;
+    }
+
+    public String toString() {
+        return "Empresa: "+ nombreEmpresa +" Nº de Acciones: "+ numeroDeAcciones+ " Valor del Paquete: " +valorPaquete;
     }
 }
