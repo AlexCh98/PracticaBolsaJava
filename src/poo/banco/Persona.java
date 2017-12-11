@@ -16,4 +16,21 @@ public class Persona {
     public String getDni() {
         return dni;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Persona)) return false;
+
+        Persona persona = (Persona) o;
+
+        return getNombre().equals(persona.getNombre()) && getDni().equals(persona.getDni());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getNombre().hashCode();
+        result = 31 * result + getDni().hashCode();
+        return result;
+    }
 }

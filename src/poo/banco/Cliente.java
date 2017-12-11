@@ -3,12 +3,13 @@ package poo.banco;
 import poo.Excepciones.PaqueteNoEnContradoExcepcion;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Cliente extends Persona{
-    private float saldo;
+    private double saldo;
     private ArrayList<PaqueteDeAcciones> carteraDeAcciones;
 
-    public Cliente(String nombre, String dni, Float saldo) {
+    public Cliente(String nombre, String dni, double saldo) {
         super(nombre, dni);
         this.saldo = saldo;
         this.carteraDeAcciones = new ArrayList<>();
@@ -18,7 +19,7 @@ public class Cliente extends Persona{
         carteraDeAcciones.add(paqueteDeAcciones);
     }
 
-    public void actulizarSaldo(float saldo){
+    public void actulizarSaldo(double saldo){
         this.saldo = saldo;
     }
 
@@ -29,11 +30,11 @@ public class Cliente extends Persona{
                 "Cartera de acciones: \n" + this.carteraDeAcciones;
     }
 
-    public void setSaldo(Float saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 
-    public Float getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
@@ -46,14 +47,20 @@ public class Cliente extends Persona{
         return carteraDeAcciones;
     }
 
+
+
     public PaqueteDeAcciones getPaquete(String nombreEmpresa) throws PaqueteNoEnContradoExcepcion {
-        boolean encontrada=false;
-        int i=0;
-        while (!encontrada && i<this.carteraDeAcciones.size()){
-            encontrada=this.carteraDeAcciones.get(i).getNombreEmpresa().equals(nombreEmpresa);
-            i++;
+        Iterator<PaqueteDeAcciones> itr = carteraDeAcciones.iterator();
+        boolean encontrado = false;
+        PaqueteDeAcciones paquete = null;
+        while(itr.hasNext() && !encontrado){
+            paquete =  itr.next();
+            encontrado = paquete.getNombreEmpresa().equals(nombreEmpresa);
         }
-        if (!encontrada) throw new PaqueteNoEnContradoExcepcion();
-        return this.carteraDeAcciones.get(i-1);
+        if (!encontrado) throw new PaqueteNoEnContradoExcepcion();
+        return paquete;
     }
+
+
+
 }
