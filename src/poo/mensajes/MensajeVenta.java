@@ -3,11 +3,13 @@ package poo.mensajes;
 import java.util.StringJoiner;
 
 public class MensajeVenta extends Mensaje{
+    protected String nombreCliente;
     protected int accionesVenta;
     protected String nombreEmpresa;
+    final  private String tipo = "venta";
 
     public MensajeVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones) {
-        super(identificador, nombreCliente);
+        super(identificador);
         this.accionesVenta = numAcciones;
         this.nombreEmpresa = nombreEmpresa;
     }
@@ -19,5 +21,8 @@ public class MensajeVenta extends Mensaje{
         sj.add(this.nombreEmpresa);
         sj.add(Integer.toString(this.accionesVenta));
         return sj.toString();
+    }
+    public final String getTipo() {
+        return tipo;
     }
 }
