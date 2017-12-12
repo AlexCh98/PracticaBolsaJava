@@ -96,20 +96,57 @@ public class Banco {
         return  new MensajeVenta(identificador, nombreCliente, nombreEmpresa, numAcciones);
     }
 
-    public MensajeActualizacion hacerActualizacion(int identificador, String nombreCliente, String nombreEmpresa)
-            throws ClienteNoEncontradoExcepcion, NoTieneEmpresaExcepcion {
-        Cliente cliente =  buscarCliente(nombreCliente);
-        if(!comprobacionPaquete(cliente, nombreEmpresa, 0)) throw new NoTieneEmpresaExcepcion();
-        return new MensajeActualizacion(identificador, nombreCliente, nombreEmpresa);
+    public MensajeActualizacion hacerActualizacion(int identificador){
+        return new MensajeActualizacion(identificador);
     }
 
-    public void actualizarCliente(Mensaje mensaje){
-        if (mensaje instanceof MensajeCompra){
+    public int actualizarCliente(Mensaje mensaje) throws ClienteNoEncontradoExcepcion, CompraNoRealizadaExcepcion,
+            VentaNoRealizadaExcepcion, PaqueteNoEnContradoExcepcion {
+        switch (mensaje.getTipo()){
+            case "compra":{
+                if(!(((MensajeRespuestaCompra)mensaje).isOperacion())) throw new CompraNoRealizadaExcepcion();
+                Cliente cliente = this.buscarCliente(((MensajeRespuestaCompra)mensaje).getNombreCliente());
+                try {
+                    PaqueteDeAcciones paquete = cliente.getPaquete(((MensajeRespuestaCompra)mensaje).getNombreEmpresa());
+                    paquete.actualizarPaqueteCompra(
+                            ((MensajeRespuestaCompra)mensaje).getAccionesCompradas(), ((MensajeRespuestaCompra)mensaje).getPrecioAccion());
+                } catch (PaqueteNoEnContradoExcepcion e) {
+                    PaqueteDeAcciones paquete = new PaqueteDeAcciones(((MensajeRespuestaCompra)mensaje).getNombreEmpresa(),
+                            ((MensajeRespuestaCompra)mensaje).getAccionesCompradas(), ((MensajeRespuestaCompra)mensaje).getPrecioAccion());
+                    cliente.anadirPaqueteDeAciones(paquete);
+                } finally {
+                    cliente.setSaldo(cliente.getSaldo() - ((MensajeRespuestaCompra)mensaje).getDinero() +
+                            ((MensajeRespuestaCompra)mensaje).getDineroSobrante());
+                    System.out.println("Operacion nº: " + mensaje.getIdentificador());
+                    System.out.println("Nombre del cliente: " + ((MensajeRespuestaCompra)mensaje).getNombreCliente());
+                    System.out.println("Ha comprado " + ((MensajeRespuestaCompra)mensaje).getAccionesCompradas() + " acciones de "+
+                            ((MensajeRespuestaCompra)mensaje).getNombreEmpresa()  +" a un " +
+                            " precio de " + ((MensajeRespuestaCompra)mensaje).getPrecioAccion());
+                    System.out.println("El nuevo saldo del cliente es: " + cliente.getSaldo());
+                    System.out.println("Compra realizada con exito");
+                }
+                break;
+            }
+            case "venta":{
+                if(!(((MensajeRespuestaVenta)mensaje).isOperacion())) throw new VentaNoRealizadaExcepcion();
+                Cliente cliente = this.buscarCliente(((MensajeRespuestaVenta)mensaje).getNombreCliente());
+                PaqueteDeAcciones paquete = cliente.getPaquete(((MensajeRespuestaVenta)mensaje).getNombreEmpresa());
+                paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
+                        ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
+                cliente.setSaldo(cliente.getSaldo() + ((MensajeRespuestaVenta)mensaje).getDineroDevuelto());
+                System.out.println("Operacion nº: " + mensaje.getIdentificador());
+                System.out.println("Nombre del cliente: " + ((MensajeRespuestaVenta)mensaje).getNombreCliente());
+                System.out.println("Ha vendido " + ((MensajeRespuestaVenta)mensaje).getAccionesVenta() + " acciones de "+
+                        ((MensajeRespuestaVenta)mensaje).getNombreEmpresa() +" a un" +
+                        " precio de " + ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
+                System.out.println("El nuevo saldo del cliente es: " + cliente.getSaldo());
+                System.out.println("Compra realizada con exito");
+                break;
+            }
+            default:{//actualizacion
 
-        }else if (mensaje instanceof  MensajeVenta){
-
-        }else{
-
+            }
         }
+        return 0;
     }
 }

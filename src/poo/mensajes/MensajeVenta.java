@@ -25,4 +25,16 @@ public class MensajeVenta extends Mensaje{
     public final String getTipo() {
         return tipo;
     }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public int getAccionesVenta() {
+        return accionesVenta;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
 }

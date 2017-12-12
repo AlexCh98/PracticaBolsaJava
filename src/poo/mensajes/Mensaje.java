@@ -11,5 +11,7 @@ abstract public class Mensaje {
     abstract public String toString();
     abstract public String getTipo();
 
-
+    public int getIdentificador() {
+        return identificador;
+    }
 }

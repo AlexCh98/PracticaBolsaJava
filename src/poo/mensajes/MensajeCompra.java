@@ -28,4 +28,15 @@ public class MensajeCompra extends Mensaje {
         return tipo;
     }
 
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public double getDinero() {
+        return dinero;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
 }

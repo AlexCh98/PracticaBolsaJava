@@ -10,7 +10,7 @@ public class MensajeRespuestaVenta extends MensajeVenta{
     public MensajeRespuestaVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones, boolean operacion,double dineroDevuelto , double precioAccion) {
         super(identificador, nombreCliente,nombreEmpresa,numAcciones);
         this.operacion = operacion;
-        this.dineroDevuelto=dineroDevuelto;
+        this.dineroDevuelto = dineroDevuelto;
         this.precioAccion = precioAccion;
 
     }
@@ -23,5 +23,17 @@ public class MensajeRespuestaVenta extends MensajeVenta{
         sj.add(Double.toString(this.dineroDevuelto));
         sj.add(Double.toString(this.precioAccion));
         return sj.toString();
+    }
+
+    public boolean isOperacion() {
+        return operacion;
+    }
+
+    public double getPrecioAccion() {
+        return precioAccion;
+    }
+
+    public double getDineroDevuelto() {
+        return dineroDevuelto;
     }
 }
