@@ -9,6 +9,8 @@ public class Empresa implements Serializable{
 
     public Empresa(String nombreEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
+        //this.valorActual=0;
+        //this.valorPrevio=0;
     }
 
     public Empresa(String nombreEmpresa, double valorActual, double valorPrevio) {
@@ -61,7 +63,7 @@ public class Empresa implements Serializable{
     }
 
     public String toString (){
-        return (new StringBuilder("Nombre: " + this.nombreEmpresa  + ", Valor Actual " + this.valorActual+", Valor Previo "+this.valorPrevio).toString());
+        return "Nombre: " + this.nombreEmpresa  + ", Valor Actual " + this.valorActual+", Valor Previo "+this.valorPrevio;
     }
 
 

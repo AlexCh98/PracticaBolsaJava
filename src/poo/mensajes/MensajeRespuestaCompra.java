@@ -1,5 +1,7 @@
 package poo.mensajes;
 
+import poo.bolsa.Empresa;
+
 import java.util.StringJoiner;
 
 public class MensajeRespuestaCompra extends MensajeCompra{
@@ -8,8 +10,9 @@ public class MensajeRespuestaCompra extends MensajeCompra{
     private double precioAccion;
     private double dineroSobrante;
 
-    public MensajeRespuestaCompra(int identificador, String nombreCliente, boolean operacion, int numAccionesCompradas,double precioAccion, double dineroSobrante) {
-        super(identificador, nombreCliente);
+
+    public MensajeRespuestaCompra(int identificador, String nombreCliente, String nombreEmpresa,double dinero, boolean operacion, int numAccionesCompradas, double precioAccion, double dineroSobrante) {
+        super(identificador, nombreCliente,nombreEmpresa,dinero);
         this.operacion = operacion;
         this.accionesCompradas=numAccionesCompradas;
         this.precioAccion = precioAccion;

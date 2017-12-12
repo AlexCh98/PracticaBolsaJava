@@ -2,13 +2,13 @@ package poo.mensajes;
 
 import java.util.StringJoiner;
 
-public class MensajeRespuestaVenta extends Mensaje{
+public class MensajeRespuestaVenta extends MensajeVenta{
     private boolean operacion;
     private double precioAccion;
     private double dineroDevuelto;
 
-    public MensajeRespuestaVenta(int identificador, String nombreCliente, boolean operacion,double dineroDevuelto , double precioAccion) {
-        super(identificador, nombreCliente);
+    public MensajeRespuestaVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones, boolean operacion,double dineroDevuelto , double precioAccion) {
+        super(identificador, nombreCliente,nombreEmpresa,numAcciones);
         this.operacion = operacion;
         this.dineroDevuelto=dineroDevuelto;
         this.precioAccion = precioAccion;
