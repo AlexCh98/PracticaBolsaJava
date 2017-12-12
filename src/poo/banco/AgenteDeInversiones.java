@@ -33,15 +33,23 @@ public class AgenteDeInversiones {
 
         for (Mensaje peticion: peticiones){
             //banco.actualizarCliente(elaborarMensajeRespuesta(ejecutarSolicitud(peticion)));
-            System.out.println(elaborarMensajeRespuesta(ejecutarSolicitud(peticion)));
+            if (peticion.getTipo().equals("actualizacion")){
+                elaborarMensajeRespuesta(ejecutarSolicitudActualizacion(peticion));
+
+            }else{
+                System.out.println(elaborarMensajeRespuesta(ejecutarSolicitud(peticion)));
+            }
         }
 
         System.out.println("HE TERMINADO DE TRABAJAR!");
     }
 
 
-    public String ejecutarSolicitud(Mensaje peticion)throws FormatoNoValidoExcepcion,EmpresaNoEncontradaExcepcion,NoSePuedeComprarAccionesExcepcion{
-        if(peticion instanceof MensajeCompra) {
+    public String ejecutarSolicitud(Mensaje peticion){
+        return this.bolsa.realizarOperacion(peticion.toString(),peticion.getTipo());
+
+        /*
+        if(peticion. instanceof MensajeCompra) {
             MensajeCompra mensaje = (MensajeCompra) peticion;
             return this.bolsa.realizarOperacionCompra(mensaje.toString());
 
@@ -54,7 +62,10 @@ public class AgenteDeInversiones {
             MensajeActualizacion mensaje = (MensajeActualizacion) peticion;
             return this.bolsa.realizarOperacionActualizacion(mensaje.toString());
         }
+*/
 
+    }
+    public String ejecutarSolicitudActualizacion(Mensaje peticion){
 
     }
 
