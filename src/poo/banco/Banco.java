@@ -4,10 +4,7 @@ import poo.Excepciones.*;
 import poo.bolsa.BolsaDeValores;
 import poo.mensajes.*;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 
 public class Banco {
@@ -100,8 +97,8 @@ public class Banco {
         return new MensajeActualizacion(identificador);
     }
 
-    public int actualizarCliente(Mensaje mensaje) throws ClienteNoEncontradoExcepcion, CompraNoRealizadaExcepcion,
-            VentaNoRealizadaExcepcion, PaqueteNoEnContradoExcepcion {
+    public void actualizarCliente(Mensaje mensaje) throws ClienteNoEncontradoExcepcion, CompraNoRealizadaExcepcion,
+            VentaNoRealizadaExcepcion {
         switch (mensaje.getTipo()){
             case "compra":{
                 if(!(((MensajeRespuestaCompra)mensaje).isOperacion())) throw new CompraNoRealizadaExcepcion();
@@ -130,9 +127,14 @@ public class Banco {
             case "venta":{
                 if(!(((MensajeRespuestaVenta)mensaje).isOperacion())) throw new VentaNoRealizadaExcepcion();
                 Cliente cliente = this.buscarCliente(((MensajeRespuestaVenta)mensaje).getNombreCliente());
-                PaqueteDeAcciones paquete = cliente.getPaquete(((MensajeRespuestaVenta)mensaje).getNombreEmpresa());
+                PaqueteDeAcciones paquete = null;
+                try {
+                    paquete = cliente.getPaquete(((MensajeRespuestaVenta) mensaje).getNombreEmpresa());
+                } catch (PaqueteNoEnContradoExcepcion excepcion) {
+                    //No llega nunca aqui
+                }
                 paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
-                        ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
+                        ((MensajeRespuestaVenta)mensaje).getPrecioAccion());//Nunca da nullPointer dado que siempre funciona la asignacion
                 cliente.setSaldo(cliente.getSaldo() + ((MensajeRespuestaVenta)mensaje).getDineroDevuelto());
                 System.out.println("Operacion nº: " + mensaje.getIdentificador());
                 System.out.println("Nombre del cliente: " + ((MensajeRespuestaVenta)mensaje).getNombreCliente());
@@ -143,10 +145,51 @@ public class Banco {
                 System.out.println("Compra realizada con exito");
                 break;
             }
-            default:{//actualizacion
-
+            case "actualizacion" :
+                System.out.println("Operacion nº: " + mensaje.getIdentificador());
+                ArrayList<String> nombresEmpresas = ((MensajeRespuestaActualizacion)mensaje).getNombresEmpresas();
+                ArrayList<Double> valoresEmpresas = ((MensajeRespuestaActualizacion)mensaje).getValoresEmpresas();
+                int numPaquetesActualizados = 0;
+                int numPaquetesNoActualizados = 0;
+                int numClientes = 0;
+                for (Cliente cliente : clientes) {
+                    System.out.println("Nombre del cliente: " + cliente.getNombre());
+                    if (cliente.getCarteraDeAcciones().size() == 0){
+                        System.out.println("El cliente no tiene acciones de ninguna empresa");
+                    }else {
+                        for (String nombreEmpresa : nombresEmpresas) {
+                            try {
+                                PaqueteDeAcciones paquete = cliente.getPaquete(nombreEmpresa);
+                                paquete.actulizarPaqueteValor(valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa)));
+                                if (paquete.getValorPaquete() != paquete.getNumeroDeAcciones() *
+                                        valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa))) {
+                                    System.out.println("Se actulizado el valor de las acciones de " + nombreEmpresa +
+                                            " el nuevo valor del paquete es" + paquete.getValorPaquete());
+                                    numPaquetesActualizados++;
+                                } else {
+                                    numPaquetesNoActualizados++;
+                                }
+                            } catch (PaqueteNoEnContradoExcepcion e) {
+                                numPaquetesNoActualizados++;
+                                //Si no existe el paquete pasamos a la siguiente empresa(siguiente iteracion del for each)
+                            }
+                        }
+                        if (numPaquetesActualizados == 0) {
+                            System.out.println("No se ha actualizado ningun paquete de este cliente");
+                        } else if (numPaquetesNoActualizados == 0) {
+                            System.out.println("Se han actualizado todos los paquetes de este cliente");
+                            numClientes++;
+                        } else {
+                            System.out.println("Se han actualizado " + numPaquetesActualizados + " paquretes de acciones");
+                            System.out.println("No se han actualizado " + numPaquetesNoActualizados + " paquretes de acciones");
+                            numClientes++;
+                        }
+                    }
+                }
+                System.out.println("Actualizacion de paquetes de " + numClientes + " clientes");
+                System.out.println("Actualizacion de paquetes realizada con exito");
+                break;
             }
         }
-        return 0;
     }
-}
+

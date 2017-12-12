@@ -33,4 +33,13 @@ public class MensajeRespuestaActualizacion extends MensajeActualizacion{
         sj.add(sbValoresEmpresas.toString());
         return sj.toString();
     }
+
+
+    public ArrayList<String> getNombresEmpresas() {
+        return nombresEmpresas;
+    }
+
+    public ArrayList<Double> getValoresEmpresas() {
+        return valoresEmpresas;
+    }
 }

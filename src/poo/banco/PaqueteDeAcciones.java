@@ -19,6 +19,10 @@ public class PaqueteDeAcciones {
         return numeroDeAcciones;
     }
 
+    public double getValorPaquete() {
+        return valorPaquete;
+    }
+
     public void actualizarPaqueteCompra(int numeroDeAcciones, double precioCompra){
         this.numeroDeAcciones = this.numeroDeAcciones + numeroDeAcciones;
         this.valorPaquete = numeroDeAcciones * precioCompra;
