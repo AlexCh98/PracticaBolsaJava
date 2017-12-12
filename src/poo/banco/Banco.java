@@ -131,10 +131,11 @@ public class Banco {
                 try {
                     paquete = cliente.getPaquete(((MensajeRespuestaVenta) mensaje).getNombreEmpresa());
                 } catch (PaqueteNoEnContradoExcepcion excepcion) {
-                    //No llega nunca aqui
+                    //No llega nunca aqui, se supone que ya se comprobo que el cliente podia vender al realizar el MensajeVenta
                 }
+                //La linea siguiente nunca da nullPointer dado que siempre funciona la asignacion
                 paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
-                        ((MensajeRespuestaVenta)mensaje).getPrecioAccion());//Nunca da nullPointer dado que siempre funciona la asignacion
+                        ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
                 cliente.setSaldo(cliente.getSaldo() + ((MensajeRespuestaVenta)mensaje).getDineroDevuelto());
                 System.out.println("Operacion nº: " + mensaje.getIdentificador());
                 System.out.println("Nombre del cliente: " + ((MensajeRespuestaVenta)mensaje).getNombreCliente());
