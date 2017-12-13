@@ -70,23 +70,25 @@ public class AgenteDeInversiones {
     }
 
     public Mensaje elaborarMensajeRespuesta(String mensaje) throws FormatoNoValidoExcepcion{
+
         String[] fields = mensaje.split("\\|");
-        int identificador = 0;
-        String nombreCliente=null;
+
+
         Boolean realizadaoperacion=false;
         int numAccionesCompraVenta = 0;
-        String nombreEmpresa=null;
+
         double dineroAccion=0;
         double dineroSobranteDevuelto=0;
-
-        if (fields.length==6){//MensajeRespuestaCompra
+        int identificador = Integer.parseInt(fields[0]);
+        String nombreCliente = fields[1];
+        String nombreEmpresa = fields[2];
+        if (fields.length==7){//MensajeRespuestaCompra
             try{
-                identificador = Integer.parseInt(fields[0]);
-                nombreCliente = fields[1];
-                realizadaoperacion = Boolean.parseBoolean(fields[2]);
-                numAccionesCompraVenta =  Integer.parseInt(fields[3]);
-                dineroAccion=Double.parseDouble(fields[4]);
-                dineroSobranteDevuelto=Double.parseDouble(fields[5]);
+
+                realizadaoperacion = Boolean.parseBoolean(fields[3]);
+                numAccionesCompraVenta =  Integer.parseInt(fields[4]);
+                dineroAccion=Double.parseDouble(fields[5]);
+                dineroSobranteDevuelto=Double.parseDouble(fields[6]);
             } catch (NumberFormatException e){
                 throw new FormatoNoValidoExcepcion();
             }

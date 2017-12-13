@@ -92,54 +92,55 @@ public class BolsaDeValores {
         String   nombreCliente = fields[1];
         String  nombreEmpresa = fields[2];
         Empresa empresa = new Empresa("");
-        Boolean operacion=false;
         ArrayList<Object> array = new ArrayList<>();
+        Boolean operacion=false;
         array.add(identificador);
         array.add(nombreCliente);
         array.add(nombreEmpresa);
-        try{
-            empresa = buscarEmpresa(nombreEmpresa);
-        }catch (EmpresaNoEncontradaExcepcion e){
-            nombreEmpresa="";
-        }
+
         switch (tipo){
             case "compra":{
                 double dinero = Double.parseDouble(fields[3]);
-                Object[] numTitulos = new Object[0];
-                int accionesCompradas;
-                double dineroSobrante;
-                try {
-                    numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
-                    accionesCompradas =(int) numTitulos[0];
-                    dineroSobrante =(double) numTitulos[1];
-                } catch (NoSePuedeComprarAccionesExcepcion e) {
-                    accionesCompradas = 0;
-                    dineroSobrante = 0;
-                }
-                if(!nombreEmpresa.equals("")){
+                Object[] numTitulos;
+                int accionesCompradas=0;
+                double dineroSobrante=0;
+                try{
+                    empresa = buscarEmpresa(nombreEmpresa);
                     this.listaEmpresas.get(this.listaEmpresas.indexOf(empresa)).valorActualEmpresa(empresa.getValorActual()*(0.01+1));
+                    try {
+                        numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
+                        accionesCompradas =(int) numTitulos[0];
+                        dineroSobrante =(double) numTitulos[1];
+                    } catch (NoSePuedeComprarAccionesExcepcion e) {
+                        //accionesCompradas = 0;
+                        //dineroSobrante = 0;
+                    }
+                }catch (EmpresaNoEncontradaExcepcion e){
+                    operacion = false;
+                }finally {
+                    array.add(accionesCompradas);
+                    array.add(accionesCompradas!=0);
+                    array.add(empresa.getValorPrevio());
+                    array.add(dineroSobrante);
+                    return Utilidades.toString(array);
                 }
-                array.add(accionesCompradas!=0);
-                array.add(accionesCompradas);
-                array.add(empresa.getValorPrevio());
-                array.add(dineroSobrante);
-                return Utilidades.toString(array);
-
             }default:{
                 int numAccionesVenta =  Integer.parseInt(fields[3]);
-                Double dineroRecibido =empresa.getValorActual()*numAccionesVenta;
-
-                array.add(numAccionesVenta);
-                array.add("true");
-                array.add(dineroRecibido);
-                array.add(empresa.getValorActual());
-
-                return Utilidades.toString(array);
+                Double dineroRecibido=0.0;
+                try{
+                    empresa = buscarEmpresa(nombreEmpresa);
+                    dineroRecibido =empresa.getValorActual()*numAccionesVenta;
+                }catch (EmpresaNoEncontradaExcepcion e){
+                    operacion = false;
+                }finally {
+                    array.add(numAccionesVenta);
+                    array.add(operacion);
+                    array.add(dineroRecibido);
+                    array.add(empresa.getValorActual());
+                    return Utilidades.toString(array);
+                }
             }
-
         }
-
-
     }
 
 
