@@ -34,23 +34,23 @@ public class Banco {
         }
     }
 
-    public void subirClienteAPremium(Cliente cliente, String nombreGestorInversores)
+    public void subirClienteAPremium(Cliente cliente, String nombreGestorInversores, String dniGestorInversiones)
             throws ClienteNoEncontradoExcepcion, ClienteYaEstaExcepcion, ClienteYaEsPremiumExcepcion {
         if (!this.clientes.contains(cliente)) throw new ClienteNoEncontradoExcepcion();
         if (cliente instanceof ClientePremium) throw new ClienteYaEsPremiumExcepcion();
         this.clientes.remove(cliente);
         ClientePremium clientePremium = new ClientePremium(cliente.getNombre(), cliente.getDni(),
-                cliente.getSaldo(), nombreGestorInversores);
+                cliente.getSaldo(), new GestorInversiones(nombreGestorInversores, dniGestorInversiones));
         clientePremium.setCarteraDeAcciones(cliente.getCarteraDeAcciones());
         this.anadirCliente(clientePremium);
     }
 
-    public String solicitarRecomendacionInversion(Cliente cliente, BolsaDeValores bolsa)
+    /*public String solicitarRecomendacionInversion(Cliente cliente, BolsaDeValores bolsa)
             throws ClienteNoPremiumExcepcion, ClienteNoEncontradoExcepcion {
         Cliente clienteBuscar = buscarCliente(cliente.getNombre());
         if(!(cliente instanceof ClientePremium)) throw  new ClienteNoPremiumExcepcion();
         return  bolsa.empresaMayorDiferenciaAcciones();
-    }
+    }*/
 
     public boolean clienteTieneSuficienteSaldo(Cliente cliente, double saldo) {
         return cliente.getSaldo() >= saldo;
@@ -134,8 +134,11 @@ public class Banco {
                     //No llega nunca aqui, se supone que ya se comprobo que el cliente podia vender al realizar el MensajeVenta
                 }
                 //La linea siguiente nunca da nullPointer dado que siempre funciona la asignacion
-                paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
-                        ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
+                //Opcion uno: assert paquete != null;
+                //Opcion dos: if (paquete != null) {
+                    paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
+                            ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
+                //}
                 cliente.setSaldo(cliente.getSaldo() + ((MensajeRespuestaVenta)mensaje).getDineroDevuelto());
                 System.out.println("Operacion nº: " + mensaje.getIdentificador());
                 System.out.println("Nombre del cliente: " + ((MensajeRespuestaVenta)mensaje).getNombreCliente());

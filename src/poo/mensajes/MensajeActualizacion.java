@@ -2,7 +2,6 @@ package poo.mensajes;
 import java.util.StringJoiner;
 
 public class MensajeActualizacion extends Mensaje{
-    final  private String tipo = "actualizacion";
 
     public MensajeActualizacion(int identificador) {
         super(identificador);
@@ -14,6 +13,6 @@ public class MensajeActualizacion extends Mensaje{
     }
 
     public final String getTipo() {
-        return tipo;
+        return "actualizacion";
     }
 }

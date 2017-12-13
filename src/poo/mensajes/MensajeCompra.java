@@ -7,7 +7,6 @@ public class MensajeCompra extends Mensaje {
     protected String nombreCliente;
     protected double dinero;
     protected String nombreEmpresa;
-    final  private String tipo = "compra";
 
     public MensajeCompra(int identificador, String nombreCliente, String nombreEmpresa, double dinero) {
         super(identificador);
@@ -25,7 +24,7 @@ public class MensajeCompra extends Mensaje {
         return sj.toString();
     }
     public final String getTipo() {
-        return tipo;
+        return "compra";
     }
 
     public String getNombreCliente() {

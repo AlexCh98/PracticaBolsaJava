@@ -6,7 +6,6 @@ public class MensajeVenta extends Mensaje{
     protected String nombreCliente;
     protected int accionesVenta;
     protected String nombreEmpresa;
-    final  private String tipo = "venta";
 
     public MensajeVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones) {
         super(identificador);
@@ -22,8 +21,9 @@ public class MensajeVenta extends Mensaje{
         sj.add(Integer.toString(this.accionesVenta));
         return sj.toString();
     }
+
     public final String getTipo() {
-        return tipo;
+        return "venta";
     }
 
     public String getNombreCliente() {
