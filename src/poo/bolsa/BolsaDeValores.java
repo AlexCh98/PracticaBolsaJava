@@ -4,6 +4,8 @@ package poo.bolsa;
 import poo.Excepciones.*;
 import poo.general.Utilidades;
 
+import javax.swing.text.html.HTMLDocument;
+
 import static poo.general.Utilidades.*;
 
 import java.io.*;
@@ -118,6 +120,7 @@ public class BolsaDeValores {
                 }catch (EmpresaNoEncontradaExcepcion e){
                     operacion = false;
                 }finally {
+                    array.add(dinero);
                     array.add(accionesCompradas);
                     array.add(accionesCompradas!=0);
                     array.add(empresa.getValorPrevio());
@@ -130,6 +133,7 @@ public class BolsaDeValores {
                 try{
                     empresa = buscarEmpresa(nombreEmpresa);
                     dineroRecibido =empresa.getValorActual()*numAccionesVenta;
+                    operacion = true;
                 }catch (EmpresaNoEncontradaExcepcion e){
                     operacion = false;
                 }finally {
@@ -151,27 +155,22 @@ public class BolsaDeValores {
         String[] fields = mensaje.split("\\|");
 
         int identificador = 0;
-        String nombreCliente = null;
-        String nombreEmpresa = null;
-
-
-        if (fields.length<3) throw new FormatoNoValidoExcepcion();
         try{
             identificador = Integer.parseInt(fields[0]);
-            nombreCliente = fields[1];
-            nombreEmpresa = fields[2];
         } catch (NumberFormatException e){
             throw new FormatoNoValidoExcepcion();
         }
-        Empresa empresa = buscarEmpresa(nombreEmpresa);
+        ArrayList<Object> arrayDatosEmpresa = obtenerDatosEmpresas(this.listaEmpresas);
 
-        StringJoiner sj = new StringJoiner("|");
-        sj.add(Integer.toString(identificador));
-        sj.add(nombreCliente);
-        sj.add(nombreEmpresa);
-        sj.add(Double.toString(empresa.getValorActual()));
-        return sj.toString();
+        ArrayList<Object> array = new ArrayList<>();
+        array.add(identificador);
+        array.add(arrayDatosEmpresa.get(0));
+        array.add(arrayDatosEmpresa.get(1));
+        array.add(arrayDatosEmpresa.get(2));
+        return Utilidades.toString(array);
     }
+
+
 
     public Empresa buscarEmpresa(String nombreEmpresa) throws EmpresaNoEncontradaExcepcion {
         Iterator<Empresa> itr = this.listaEmpresas.iterator();
@@ -187,15 +186,15 @@ public class BolsaDeValores {
 
     public Object[] calcularNumTitulo(double dinero,double valorActual) throws NoSePuedeComprarAccionesExcepcion {
 
-            double cociente=(dinero/valorActual);
+        double cociente=(dinero/valorActual);
 
-            int numAcciones=(int) Math.floor(cociente);
-            double restoAcciones=cociente-numAcciones;
-            if(numAcciones==0) throw new NoSePuedeComprarAccionesExcepcion();
-            Object[] accionesCompradas = new Object[2];
-            accionesCompradas[0]=numAcciones;
-            accionesCompradas[1]=redondearDecimales(restoAcciones*valorActual,2);
-            return accionesCompradas;
+        int numAcciones=(int) Math.floor(cociente);
+        double restoAcciones=cociente-numAcciones;
+        if(numAcciones==0) throw new NoSePuedeComprarAccionesExcepcion();
+        Object[] accionesCompradas = new Object[2];
+        accionesCompradas[0]=numAcciones;
+        accionesCompradas[1]=redondearDecimales(restoAcciones*valorActual,2);
+        return accionesCompradas;
     }
 
 
@@ -210,7 +209,7 @@ public class BolsaDeValores {
         }
     }
 
-    public String empresaMayorDiferenciaAcciones (){
+   /* public String empresaMayorDiferenciaAcciones (){
         ArrayList<Empresa> empresas=this.listaEmpresas;
         double diferencia=0;
         Empresa empresaMayorDiferencia = null;
@@ -222,7 +221,7 @@ public class BolsaDeValores {
         }
         return empresaMayorDiferencia.getNombreEmpresa();
     }
-
+*/
 
 
 

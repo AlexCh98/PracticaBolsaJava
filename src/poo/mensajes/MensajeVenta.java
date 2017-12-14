@@ -9,6 +9,7 @@ public class MensajeVenta extends Mensaje{
 
     public MensajeVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones) {
         super(identificador);
+        this.nombreCliente = nombreCliente;
         this.accionesVenta = numAcciones;
         this.nombreEmpresa = nombreEmpresa;
     }

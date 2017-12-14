@@ -2,12 +2,13 @@ package poo;
 
 import poo.Excepciones.*;
 
-import poo.banco.AgenteDeInversionesCopia;
+import poo.banco.AgenteDeInversiones;
 import poo.banco.Banco;
 import poo.banco.Cliente;
-import poo.bolsa.BolsaDeValoresCopia;
+import poo.bolsa.BolsaDeValores;
 import poo.bolsa.Empresa;
 import poo.general.InterfazDeUsuario;
+import poo.mensajes.MensajeActualizacion;
 import poo.mensajes.MensajeCompra;
 import poo.mensajes.MensajeVenta;
 
@@ -24,8 +25,8 @@ public class Main {
         Empresa Caixa = new Empresa("Caixa",3.541);
         Empresa Santander = new Empresa("Santander",3.541);
         Empresa Grifol = new Empresa("Grifol",3.541);
-        BolsaDeValoresCopia bolsa = new BolsaDeValoresCopia("IBEX",repsol);
-       bolsa.añadirEmpresa(cepsa);
+        BolsaDeValores bolsa = new BolsaDeValores("IBEX",repsol);
+        bolsa.añadirEmpresa(cepsa);
         bolsa.añadirEmpresa(Iberdrola);
         bolsa.añadirEmpresa(Caixa);
         bolsa.añadirEmpresa(Santander);
@@ -34,25 +35,28 @@ public class Main {
         bolsa.imprimirEmpresas();
 
         bolsa.realizarCopiaSeguridad();
+
        // bolsa.restaurarCopiaSeguridad();
       /*bolsa.actualizarValoresAcciones();*/
-        bolsa.imprimirEmpresas();
+        //bolsa.imprimirEmpresas();
 
         /*try {
             bolsa.realizarOperacionCompra("5052|John Nash|Tesla|0003000");
         }catch(EmpresaNoEncontradaExcepcion e){e.printStackTrace();}*/
 
-        AgenteDeInversionesCopia broker= new AgenteDeInversionesCopia(bolsa);
+        AgenteDeInversiones broker= new AgenteDeInversiones(bolsa);
         MensajeVenta mensaje4 = new MensajeVenta(1000,"Alex","Repsol",15);
+        MensajeActualizacion mens = new MensajeActualizacion(5025);
         MensajeCompra mensaje = new MensajeCompra(5052,"Alex","Repsol",1000);
-        MensajeCompra mensaje3 = new MensajeCompra(2500,"Alex","Cepsa",1250);
+        /*MensajeCompra mensaje3 = new MensajeCompra(2500,"Alex","Cepsa",1250);
         MensajeCompra mensaje1 = new MensajeCompra(5020,"Marcos","Tesla",1052);
-        MensajeCompra mensaje2= new MensajeCompra(6000,"Dani","Hirdrola",1012);
+        MensajeCompra mensaje2= new MensajeCompra(6000,"Dani","Hirdrola",1012);*/
+        MensajeActualizacion mensA = new MensajeActualizacion(5025);
 
+        //broker.almacenarMensaje(mensaje4);
+        broker.almacenarMensaje(mens);
         broker.almacenarMensaje(mensaje);
-        broker.almacenarMensaje(mensaje4);
-        broker.almacenarMensaje(mensaje3);
-        broker.almacenarMensaje(mensaje2);
+        broker.almacenarMensaje(mensA);
         broker.empiezaTrabajar();
     }
 

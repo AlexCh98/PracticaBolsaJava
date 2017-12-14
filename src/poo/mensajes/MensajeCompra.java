@@ -10,6 +10,7 @@ public class MensajeCompra extends Mensaje {
 
     public MensajeCompra(int identificador, String nombreCliente, String nombreEmpresa, double dinero) {
         super(identificador);
+        this.nombreCliente = nombreCliente;
         this.nombreEmpresa = nombreEmpresa;
         this.dinero = dinero;
     }
