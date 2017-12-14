@@ -30,5 +30,19 @@ public class MensajeRespuestaCompra extends MensajeCompra{
         return sj.toString();
     }
 
+    public boolean isOperacion() {
+        return operacion;
+    }
 
+    public int getAccionesCompradas() {
+        return accionesCompradas;
+    }
+
+    public double getPrecioAccion() {
+        return precioAccion;
+    }
+
+    public double getDineroSobrante() {
+        return dineroSobrante;
+    }
 }

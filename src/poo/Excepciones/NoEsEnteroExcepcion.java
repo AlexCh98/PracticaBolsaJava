@@ -1,8 +1,8 @@
 package poo.Excepciones;
 
 public class NoEsEnteroExcepcion extends Exception{
-    public NoEsEnteroExcepcion(String message) {
-        super(message);
+    public NoEsEnteroExcepcion() {
+        super("No es un entero");
     }
 
 }
