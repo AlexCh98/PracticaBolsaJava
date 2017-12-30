@@ -45,16 +45,12 @@ public class BolsaDeValores {
     public void realizarCopiaSeguridad() {
         try {
             FileOutputStream fos = new FileOutputStream("Bolsa.dat");
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            DataOutputStream dos = new DataOutputStream(bos);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-            dos.writeUTF(this.nombreBolsa);
-            for (Empresa e: this.listaEmpresas){
-                dos.writeUTF(e.getNombreEmpresa());
-                dos.writeDouble(e.getValorActual());
-                dos.writeDouble(e.getValorPrevio());
-            }
-            dos.close();
+
+            oos.writeObject(this.nombreBolsa);
+            oos.writeObject(this.listaEmpresas);
+            oos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,22 +59,13 @@ public class BolsaDeValores {
     public void restaurarCopiaSeguridad(){
         try{
             FileInputStream fis = new FileInputStream ("Bolsa.dat");
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            DataInputStream dis = new DataInputStream(bis);
-            int max=this.listaEmpresas.size();
+            ObjectInputStream ois = new ObjectInputStream(fis);
             this.listaEmpresas.clear();
-            this.nombreBolsa= dis.readUTF();
-            try{
-                while(fis!=null){
-                    this.listaEmpresas.add(new Empresa(dis.readUTF(),dis.readDouble(),dis.readDouble()));
-                }
-            }catch(IOException e){
-                fis.close();
-            }
+            this.nombreBolsa= (String) ois.readObject();
+            this.listaEmpresas = (ArrayList<Empresa>) ois.readObject();
+            ois.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -95,7 +82,7 @@ public class BolsaDeValores {
         String  nombreEmpresa = fields[2];
         Empresa empresa = new Empresa("");
         ArrayList<Object> array = new ArrayList<>();
-        Boolean operacion=false;
+        Boolean operacion = false;
         array.add(identificador);
         array.add(nombreCliente);
         array.add(nombreEmpresa);
@@ -113,16 +100,18 @@ public class BolsaDeValores {
                         numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
                         accionesCompradas =(int) numTitulos[0];
                         dineroSobrante =(double) numTitulos[1];
+                        operacion=true;
                     } catch (NoSePuedeComprarAccionesExcepcion e) {
                         //accionesCompradas = 0;
                         //dineroSobrante = 0;
+                        //Operacion = false
                     }
                 }catch (EmpresaNoEncontradaExcepcion e){
-                    operacion = false;
+                    //peracion = false;
                 }finally {
                     array.add(dinero);
                     array.add(accionesCompradas);
-                    array.add(accionesCompradas!=0);
+                    array.add(operacion);
                     array.add(empresa.getValorPrevio());
                     array.add(dineroSobrante);
                     return Utilidades.toString(array);
