@@ -25,8 +25,9 @@ public class MensajeRespuestaActualizacion extends MensajeActualizacion{
         }
         sbNombresEmpresas.deleteCharAt(sbNombresEmpresas.lastIndexOf(","));
         StringBuilder sbValoresEmpresas = new StringBuilder("");
+
         for(Double d : this.valoresEmpresas){
-            sbValoresEmpresas.append(d);
+            sbValoresEmpresas.append( d);
             sbValoresEmpresas.append(",");
         }
         sbValoresEmpresas.deleteCharAt(sbValoresEmpresas.lastIndexOf(","));
