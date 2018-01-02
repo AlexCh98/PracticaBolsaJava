@@ -52,6 +52,7 @@ public class AgenteDeInversiones {
     public String ejecutarSolicitudActualizacion(Mensaje peticion) throws FormatoNoValidoExcepcion, EmpresaNoEncontradaExcepcion {
             return this.bolsa.realizarOperacionActualizacion(peticion.toString());
     }
+
     public MensajeRespuestaActualizacion elaborarMensajeRespuestaActualizacion(String mensaje){
         String[] fields = mensaje.split("\\|");
         int identificador = Integer.parseInt(fields[0]);
@@ -80,7 +81,7 @@ public class AgenteDeInversiones {
             int numAccionesCompradas = Integer.parseInt(fields[5]);
             dineroAccion = Double.parseDouble(fields[6]);
             dineroSobranteDevuelto = Double.parseDouble(fields[7]);
-            MensajeRespuestaCompra mensajeRespuesta = new MensajeRespuestaCompra(identificador, nombreCliente, nombreEmpresa, dineroTotal, realizadaoperacion, numAccionesCompradas, dineroAccion, dineroSobranteDevuelto);
+            Mensaje mensajeRespuesta = new MensajeRespuestaCompra(identificador, nombreCliente, nombreEmpresa, dineroTotal, realizadaoperacion, numAccionesCompradas, dineroAccion, dineroSobranteDevuelto);
             return mensajeRespuesta;
         } else {
             int numAcciones = Integer.parseInt(fields[3]);
@@ -90,7 +91,12 @@ public class AgenteDeInversiones {
             Mensaje mensajeRespuesta = new MensajeRespuestaVenta(identificador, nombreCliente, nombreEmpresa, numAcciones, realizadaoperacion, dineroSobranteDevuelto, dineroAccion);
             return mensajeRespuesta;
         }
+    }
 
+    public void imprimirPeticionesPendientes(){
+        for(Mensaje m : this.listaPeticiones){
+            System.out.println(m.toString());
+        }
     }
 
 }

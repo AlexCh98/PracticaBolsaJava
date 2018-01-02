@@ -1,6 +1,8 @@
 package poo.banco;
 
-public class Persona {
+import java.io.Serializable;
+
+public class Persona implements Serializable{
     protected String nombre;
     protected String dni;
 
@@ -32,5 +34,10 @@ public class Persona {
         int result = getNombre().hashCode();
         result = 31 * result + getDni().hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+       return "Nombre: " + this.nombre  + ", DNI: " + this.dni;
     }
 }

@@ -1,6 +1,8 @@
 package poo.banco;
 
-public class PaqueteDeAcciones {
+import java.io.Serializable;
+
+public class PaqueteDeAcciones implements Serializable{
     private String nombreEmpresa;
     private int numeroDeAcciones;
     private double valorPaquete;
@@ -38,6 +40,6 @@ public class PaqueteDeAcciones {
     }
 
     public String toString() {
-        return "Empresa: "+ nombreEmpresa +" Nº de Acciones: "+ numeroDeAcciones+ " Valor del Paquete: " +valorPaquete;
+        return "Empresa: "+ nombreEmpresa +", Nº de Acciones: "+ numeroDeAcciones+ ", Valor del Paquete: " +valorPaquete;
     }
 }

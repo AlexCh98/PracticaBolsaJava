@@ -2,10 +2,12 @@ package poo.banco;
 
 import poo.Excepciones.PaqueteNoEnContradoExcepcion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringJoiner;
 
-public class Cliente extends Persona{
+public class Cliente extends Persona implements Serializable{
     private double saldo;
     private ArrayList<PaqueteDeAcciones> carteraDeAcciones;
 
@@ -24,10 +26,7 @@ public class Cliente extends Persona{
     }
 
     public String toString(){
-        return "Nombre : " + this.nombre +
-                "DNI: " + this.dni +
-                "Saldo: " + this.saldo +
-                "Cartera de acciones: \n" + this.carteraDeAcciones;
+        return super.toString()+", Saldo: " + this.saldo +", Cartera de acciones: \n" + this.carteraDeAcciones.toString();
     }
 
     public void setSaldo(double saldo) {
@@ -60,7 +59,5 @@ public class Cliente extends Persona{
         if (!encontrado) throw new PaqueteNoEnContradoExcepcion();
         return paquete;
     }
-
-
 
 }

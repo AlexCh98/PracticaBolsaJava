@@ -4,6 +4,7 @@ import poo.Excepciones.*;
 import poo.bolsa.BolsaDeValores;
 import poo.mensajes.*;
 
+import java.io.*;
 import java.util.*;
 
 
@@ -25,8 +26,28 @@ public class Banco {
         this.clientes.remove(cliente);
     }
 
-    public void realizarCopiaSeguridad(){/**/}
-    public void restaurarCopiaSeguridad(){/**/}
+    public void realizarCopiaSeguridad(){
+        try{
+            FileOutputStream fos = new FileOutputStream("Banco.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(this.nombre);
+            oos.writeObject(this.clientes);
+            oos.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void restaurarCopiaSeguridad(){
+        try{
+            FileInputStream fis = new FileInputStream("Banco.dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            this.nombre = (String) ois.readObject();
+            this.clientes = (HashSet<Cliente>) ois.readObject();
+        }catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
 
     public void imprimirClientes(){
         for (Cliente cliente : clientes) {
@@ -194,6 +215,10 @@ public class Banco {
                 System.out.println("Actualizacion de paquetes realizada con exito");
                 break;
             }
+        }
+
+        public String toString(){
+            return "Nombre Banco: " + this.nombre + ", Listado de clientes: \n" + this.clientes.toString();
         }
     }
 
