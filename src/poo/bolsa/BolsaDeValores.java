@@ -46,8 +46,6 @@ public class BolsaDeValores {
         try {
             FileOutputStream fos = new FileOutputStream("Bolsa.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-
             oos.writeObject(this.nombreBolsa);
             oos.writeObject(this.listaEmpresas);
             oos.close();

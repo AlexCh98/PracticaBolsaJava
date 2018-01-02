@@ -205,8 +205,8 @@ public class Banco {
                             System.out.println("Se han actualizado todos los paquetes de este cliente");
                             numClientes++;
                         } else {
-                            System.out.println("Se han actualizado " + numPaquetesActualizados + " paquretes de acciones");
-                            System.out.println("No se han actualizado " + numPaquetesNoActualizados + " paquretes de acciones");
+                            System.out.println("Se han actualizado " + numPaquetesActualizados + " paquetes de acciones");
+                            System.out.println("No se han actualizado " + numPaquetesNoActualizados + " paquetes de acciones");
                             numClientes++;
                         }
                     }
