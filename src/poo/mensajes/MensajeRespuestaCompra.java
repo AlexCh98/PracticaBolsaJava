@@ -7,11 +7,11 @@ import java.util.StringJoiner;
 public class MensajeRespuestaCompra extends MensajeCompra{
     private boolean operacion;
     private int accionesCompradas;
-    private double precioAccion;
-    private double dineroSobrante;
+    private Double precioAccion;
+    private Double dineroSobrante;
 
 
-    public MensajeRespuestaCompra(int identificador, String nombreCliente, String nombreEmpresa,double dinero, boolean operacion, int numAccionesCompradas, double precioAccion, double dineroSobrante) {
+    public MensajeRespuestaCompra(int identificador, String nombreCliente, String nombreEmpresa,Double dinero, boolean operacion, int numAccionesCompradas, Double precioAccion, Double dineroSobrante) {
         super(identificador, nombreCliente,nombreEmpresa,dinero);
         this.operacion = operacion;
         this.accionesCompradas=numAccionesCompradas;
@@ -38,11 +38,11 @@ public class MensajeRespuestaCompra extends MensajeCompra{
         return accionesCompradas;
     }
 
-    public double getPrecioAccion() {
+    public Double getPrecioAccion() {
         return precioAccion;
     }
 
-    public double getDineroSobrante() {
+    public Double getDineroSobrante() {
         return dineroSobrante;
     }
 }

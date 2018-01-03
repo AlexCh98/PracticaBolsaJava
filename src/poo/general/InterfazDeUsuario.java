@@ -6,31 +6,26 @@ import poo.Excepciones.NoEsEnteroExcepcion;
 import java.io.IOException;
 
 public class InterfazDeUsuario {
-    private int opcion;
-    public InterfazDeUsuario() {
-        //imprimrMenu();
+
+
+    public int getOpcion() {
         int opcion = 0;
         boolean sinError = false;
-        imprimrMenu();
         do{
             System.out.println("Introduzca la opción a ejecutar : ");
             try {
                 Escaner escaner = new Escaner();
                 opcion = escaner.leerEntero();
-                if (opcion <= 0||opcion >= 18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
+                if (opcion < 0||opcion > 18) throw new FueraRangoExcepcion("La opción introducida no es válida, introduzca una opción entre 0 y 18.");
                 sinError = true;
             } catch (NoEsEnteroExcepcion | FueraRangoExcepcion e) {
                 System.out.println(e.getMessage());
             }
         }while(!sinError);//Bucle para preguntar hasta que no de errores
-        this.opcion = opcion;
-    }
-
-    public int getOpcion() {
         return opcion;
     }
 
-    public void imprimrMenu(){
+    public void imprimirMenu(){
         System.out.println("0.- Salir");
         System.out.println("------------ESTADO------------");
         System.out.println("1.- Imprimir estado de los clientes");

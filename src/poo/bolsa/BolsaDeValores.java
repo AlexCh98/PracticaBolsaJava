@@ -42,29 +42,47 @@ public class BolsaDeValores {
     }
 
 
-    public void realizarCopiaSeguridad() {
+    public void realizarCopiaSeguridad() throws ErrorSeguridadExcepcion, ArchivoNoEncontradoExcepcion, IOException, ErrorCerrarExcepcion {
+        FileOutputStream fos = null;
         try {
-            FileOutputStream fos = new FileOutputStream("Bolsa.dat");
+            fos = new FileOutputStream("Bolsa.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(this.nombreBolsa);
             oos.writeObject(this.listaEmpresas);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }  catch (SecurityException e) {
+            throw new ErrorSeguridadExcepcion();
+        } catch (FileNotFoundException e) {
+            throw new ArchivoNoEncontradoExcepcion();
+        } finally {
+            if(fos!=null) try {
+                fos.close();
+            } catch (IOException e) {
+                throw new ErrorCerrarExcepcion();
+            }
         }
     }
 
-    public void restaurarCopiaSeguridad(){
+    public void restaurarCopiaSeguridad() throws ErrorSeguridadExcepcion, ArchivoNoEncontradoExcepcion, ErrorCerrarExcepcion, ErrorCastingExcepcion, IOException {
+        FileInputStream fis = null;
         try{
-            FileInputStream fis = new FileInputStream ("Bolsa.dat");
+            fis = new FileInputStream ("Bolsa.dat");
             ObjectInputStream ois = new ObjectInputStream(fis);
             this.listaEmpresas.clear();
             this.nombreBolsa= (String) ois.readObject();
             this.listaEmpresas = (ArrayList<Empresa>) ois.readObject();
-            ois.close();
 
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        }  catch (SecurityException e) {
+            throw new ErrorSeguridadExcepcion();
+        } catch (FileNotFoundException e) {
+            throw new ArchivoNoEncontradoExcepcion();
+        } catch (ClassNotFoundException e) {
+            throw new ErrorCastingExcepcion();
+        } finally {
+            if(fis!=null) try {
+                fis.close();
+            } catch (IOException e) {
+                throw new ErrorCerrarExcepcion();
+            }
         }
     }
     /*5052|John Nash|Tesla|0003000.00*/
@@ -87,18 +105,19 @@ public class BolsaDeValores {
 
         switch (tipo){
             case "compra":{
-                double dinero = Double.parseDouble(fields[3]);
+                Double dinero = Double.parseDouble(fields[3]);
                 Object[] numTitulos;
-                int accionesCompradas=0;
-                double dineroSobrante=0;
+                int accionesCompradas = 0;
+                Double dineroSobrante = 0.0;
                 try{
                     empresa = buscarEmpresa(nombreEmpresa);
-                    this.listaEmpresas.get(this.listaEmpresas.indexOf(empresa)).valorActualEmpresa(empresa.getValorActual()*(0.01+1));
+
                     try {
                         numTitulos = calcularNumTitulo(dinero,empresa.getValorActual());
                         accionesCompradas =(int) numTitulos[0];
-                        dineroSobrante =(double) numTitulos[1];
+                        dineroSobrante =(Double) numTitulos[1];
                         operacion=true;
+                        this.listaEmpresas.get(this.listaEmpresas.indexOf(empresa)).valorActualEmpresa(empresa.getValorActual()*(0.01+1));
                     } catch (NoSePuedeComprarAccionesExcepcion e) {
                         //accionesCompradas = 0;
                         //dineroSobrante = 0;
@@ -138,15 +157,12 @@ public class BolsaDeValores {
 
 
 
-    public String realizarOperacionActualizacion(String mensaje) throws FormatoNoValidoExcepcion, EmpresaNoEncontradaExcepcion {
+    public String realizarOperacionActualizacion(String mensaje) {
         String[] fields = mensaje.split("\\|");
 
         int identificador = 0;
-        try{
-            identificador = Integer.parseInt(fields[0]);
-        } catch (NumberFormatException e){
-            throw new FormatoNoValidoExcepcion();
-        }
+        identificador = Integer.parseInt(fields[0]);
+
         ArrayList<Object> arrayDatosEmpresa = obtenerDatosEmpresas(this.listaEmpresas);
 
         ArrayList<Object> array = new ArrayList<>();
@@ -171,12 +187,12 @@ public class BolsaDeValores {
         return empresa;
     }
 
-    public Object[] calcularNumTitulo(double dinero,double valorActual) throws NoSePuedeComprarAccionesExcepcion {
+    public Object[] calcularNumTitulo(Double dinero,Double valorActual) throws NoSePuedeComprarAccionesExcepcion {
 
-        double cociente=(dinero/valorActual);
+        Double cociente=(dinero/valorActual);
 
         int numAcciones=(int) Math.floor(cociente);
-        double restoAcciones=cociente-numAcciones;
+        Double restoAcciones=cociente-numAcciones;
         if(numAcciones==0) throw new NoSePuedeComprarAccionesExcepcion();
         Object[] accionesCompradas = new Object[2];
         accionesCompradas[0]=numAcciones;
@@ -198,7 +214,7 @@ public class BolsaDeValores {
 
    /* public String empresaMayorDiferenciaAcciones (){
         ArrayList<Empresa> empresas=this.listaEmpresas;
-        double diferencia=0;
+        Double diferencia=0;
         Empresa empresaMayorDiferencia = null;
         for (Empresa empresa: empresas){
             if(diferencia<empresa.diferenciaAcciones()){

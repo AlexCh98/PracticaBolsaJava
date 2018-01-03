@@ -14,6 +14,10 @@ public class ClientePremium extends Cliente{
     @Override
     public String toString() {
         return super.toString() +
-                "Nombre Gestor: " + this.gestorInversiones.getNombre();
+                "\n Nombre Gestor: " + this.gestorInversiones.getNombre();
+    }
+
+    public GestorInversiones getGestorInversiones() {
+        return gestorInversiones;
     }
 }

@@ -1,7 +1,6 @@
 package poo.banco;
 
 import poo.Excepciones.*;
-import poo.bolsa.BolsaDeValores;
 import poo.mensajes.*;
 
 import java.io.*;
@@ -11,41 +10,70 @@ import java.util.*;
 public class Banco {
     private String nombre;
     private HashSet<Cliente> clientes;
+    private AgenteDeInversiones agenteDeInversiones;
 
-    public Banco(String nombre, Cliente cliente) {
+    public Banco(String nombre, Cliente cliente, AgenteDeInversiones agenteDeInversiones) {
         this.nombre = nombre;
         this.clientes = new HashSet<>();
         this.clientes.add(cliente);
+        this.agenteDeInversiones = agenteDeInversiones;
     }
     public void anadirCliente(Cliente cliente)throws ClienteYaEstaExcepcion {
         if (!this.clientes.add(cliente)) throw new ClienteYaEstaExcepcion();
     }
 
-    public void eliminarCliente(Cliente cliente) throws ClienteNoEncontradoExcepcion {
-        if (!this.clientes.contains(cliente)) throw new ClienteNoEncontradoExcepcion();
+    public void eliminarCliente(String dni) throws ClienteNoEncontradoExcepcion {
+        Cliente cliente  = this.buscarCliente(dni);
         this.clientes.remove(cliente);
     }
 
-    public void realizarCopiaSeguridad(){
-        try{
-            FileOutputStream fos = new FileOutputStream("Banco.dat");
+    public void realizarCopiaSeguridad() throws IOException, ErrorCerrarExcepcion, ErrorSeguridadExcepcion, ArchivoNoEncontradoExcepcion {
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("Banco.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+
             oos.writeObject(this.nombre);
             oos.writeObject(this.clientes);
-            oos.close();
-        }catch (IOException e){
-            e.printStackTrace();
+
+        } catch (SecurityException e) {
+            throw new ErrorSeguridadExcepcion();
+        } catch (FileNotFoundException e) {
+            throw new ArchivoNoEncontradoExcepcion();
+        } finally {
+            if(fos!=null) try {
+                fos.close();
+            } catch (IOException e) {
+                throw new ErrorCerrarExcepcion();
+            }
         }
     }
 
-    public void restaurarCopiaSeguridad(){
+    public void restaurarCopiaSeguridad() throws IOException, ArchivoNoEncontradoExcepcion, ErrorSeguridadExcepcion, ErrorCerrarExcepcion, ErrorCastingExcepcion {
+        FileInputStream fis = null;
         try{
-            FileInputStream fis = new FileInputStream("Banco.dat");
+            fis = new FileInputStream ("Banco.dat");
             ObjectInputStream ois = new ObjectInputStream(fis);
-            this.nombre = (String) ois.readObject();
+            this.clientes.clear();
+            this.nombre= (String) ois.readObject();
             this.clientes = (HashSet<Cliente>) ois.readObject();
-        }catch (IOException | ClassNotFoundException e){
-            e.printStackTrace();
+            ois.close();
+
+        }  catch (SecurityException e) {
+            throw new ErrorSeguridadExcepcion();
+        } catch (FileNotFoundException e) {
+            throw new ArchivoNoEncontradoExcepcion();
+        } catch (ClassNotFoundException e) {
+            throw new ErrorCastingExcepcion();
+        } finally {
+            if(fis!=null)
+            try {
+                fis.close();
+            } catch (IOException e) {
+                throw new ErrorCerrarExcepcion();
+            }
         }
     }
 
@@ -55,9 +83,9 @@ public class Banco {
         }
     }
 
-    public void subirClienteAPremium(Cliente cliente, String nombreGestorInversores, String dniGestorInversiones)
+    public void subirClienteAPremium(String dniCliente, String nombreGestorInversores, String dniGestorInversiones)
             throws ClienteNoEncontradoExcepcion, ClienteYaEstaExcepcion, ClienteYaEsPremiumExcepcion {
-        if (!this.clientes.contains(cliente)) throw new ClienteNoEncontradoExcepcion();
+        Cliente cliente = buscarCliente(dniCliente);
         if (cliente instanceof ClientePremium) throw new ClienteYaEsPremiumExcepcion();
         this.clientes.remove(cliente);
         ClientePremium clientePremium = new ClientePremium(cliente.getNombre(), cliente.getDni(),
@@ -66,14 +94,16 @@ public class Banco {
         this.anadirCliente(clientePremium);
     }
 
-    /*public String solicitarRecomendacionInversion(Cliente cliente, BolsaDeValores bolsa)
+    public String solicitarRecomendacionInversion(String dni, int identificador)
             throws ClienteNoPremiumExcepcion, ClienteNoEncontradoExcepcion {
-        Cliente clienteBuscar = buscarCliente(cliente.getNombre());
+        Cliente cliente = buscarCliente(dni);
         if(!(cliente instanceof ClientePremium)) throw  new ClienteNoPremiumExcepcion();
-        return  bolsa.empresaMayorDiferenciaAcciones();
-    }*/
+        String nombreEmpresa = null;
+        nombreEmpresa = ((ClientePremium)cliente).getGestorInversiones().SolicitarRecomendacion(identificador, this.agenteDeInversiones);
+        return "Deberias invertir en " + nombreEmpresa;
+    }
 
-    public boolean clienteTieneSuficienteSaldo(Cliente cliente, double saldo) {
+    public boolean clienteTieneSuficienteSaldo(Cliente cliente, Double saldo) {
         return cliente.getSaldo() >= saldo;
     }
 
@@ -88,34 +118,35 @@ public class Banco {
         }
     }
 
-    private Cliente buscarCliente(String nombreCliente) throws ClienteNoEncontradoExcepcion {
+    public Cliente buscarCliente(String dni) throws ClienteNoEncontradoExcepcion {
         Iterator<Cliente> itr = clientes.iterator();
         boolean encontrado = false;
         Cliente cliente = null;
         while(itr.hasNext() && !encontrado){
             cliente =  itr.next();
-            encontrado = cliente.getNombre().equals(nombreCliente);
+            encontrado = cliente.getDni().equals(dni);
         }
         if (!encontrado) throw new ClienteNoEncontradoExcepcion();
         else return cliente;
     }
 
-    public MensajeCompra hacerCompra(int identificador, String nombreCliente, String nombreEmpresa, double dinero)
+    public void hacerCompra(int identificador, String dni, String nombreEmpresa, Double dinero)
             throws ClienteNoEncontradoExcepcion, NoSuficienteSaldoExcepcion {
-        Cliente cliente = buscarCliente(nombreCliente);
+        Cliente cliente = buscarCliente(dni);
         if (!clienteTieneSuficienteSaldo(cliente, dinero)) throw new NoSuficienteSaldoExcepcion();
-        return  new MensajeCompra(identificador, nombreCliente,nombreEmpresa, dinero);
+        this.agenteDeInversiones.almacenarMensaje(new MensajeCompra(identificador, cliente.nombre,nombreEmpresa, dinero));
     }
 
-    public MensajeVenta hacerVenta(int identificador, String nombreCliente, String nombreEmpresa, int numAcciones)
+    public void hacerVenta(int identificador, String dni, String nombreEmpresa, int numAcciones)
             throws ClienteNoEncontradoExcepcion, NoSuficientesAccionesExcecion {
-        Cliente cliente = buscarCliente(nombreCliente);
+        Cliente cliente = buscarCliente(dni);
         if(!comprobacionPaquete(cliente, nombreEmpresa, numAcciones)) throw new NoSuficientesAccionesExcecion();
-        return  new MensajeVenta(identificador, nombreCliente, nombreEmpresa, numAcciones);
+        this.agenteDeInversiones.almacenarMensaje(new MensajeVenta(identificador, cliente.nombre, nombreEmpresa, numAcciones));
     }
 
-    public MensajeActualizacion hacerActualizacion(int identificador){
-        return new MensajeActualizacion(identificador);
+    public void hacerActualizacion(int identificador) throws NoHayClientesExcepcion {
+        if(this.clientes.isEmpty()) throw  new NoHayClientesExcepcion();
+        this.agenteDeInversiones.almacenarMensaje(new MensajeActualizacion(identificador));
     }
 
     public void actualizarCliente(Mensaje mensaje) throws ClienteNoEncontradoExcepcion, CompraNoRealizadaExcepcion,
@@ -123,7 +154,7 @@ public class Banco {
         switch (mensaje.getTipo()){
             case "compra":{
                 if(!(((MensajeRespuestaCompra)mensaje).isOperacion())) throw new CompraNoRealizadaExcepcion();
-                Cliente cliente = this.buscarCliente(((MensajeRespuestaCompra)mensaje).getNombreCliente());
+                Cliente cliente = this.buscarClienteNombre(((MensajeRespuestaCompra)mensaje).getNombreCliente());
                 try {
                     PaqueteDeAcciones paquete = cliente.getPaquete(((MensajeRespuestaCompra)mensaje).getNombreEmpresa());
                     paquete.actualizarPaqueteCompra(
@@ -147,19 +178,16 @@ public class Banco {
             }
             case "venta":{
                 if(!(((MensajeRespuestaVenta)mensaje).isOperacion())) throw new VentaNoRealizadaExcepcion();
-                Cliente cliente = this.buscarCliente(((MensajeRespuestaVenta)mensaje).getNombreCliente());
+                Cliente cliente = this.buscarClienteNombre(((MensajeRespuestaVenta)mensaje).getNombreCliente());
                 PaqueteDeAcciones paquete = null;
                 try {
                     paquete = cliente.getPaquete(((MensajeRespuestaVenta) mensaje).getNombreEmpresa());
                 } catch (PaqueteNoEnContradoExcepcion excepcion) {
                     //No llega nunca aqui, se supone que ya se comprobo que el cliente podia vender al realizar el MensajeVenta
                 }
-                //La linea siguiente nunca da nullPointer dado que siempre funciona la asignacion
-                //Opcion uno: assert paquete != null;
-                //Opcion dos: if (paquete != null) {
-                    paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
+                //assert paquete != null;
+                paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
                             ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
-                //}
                 cliente.setSaldo(cliente.getSaldo() + ((MensajeRespuestaVenta)mensaje).getDineroDevuelto());
                 System.out.println("Operacion nº: " + mensaje.getIdentificador());
                 System.out.println("Nombre del cliente: " + ((MensajeRespuestaVenta)mensaje).getNombreCliente());
@@ -185,15 +213,16 @@ public class Banco {
                         for (String nombreEmpresa : nombresEmpresas) {
                             try {
                                 PaqueteDeAcciones paquete = cliente.getPaquete(nombreEmpresa);
-                                paquete.actulizarPaqueteValor(valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa)));
                                 if (paquete.getValorPaquete() != paquete.getNumeroDeAcciones() *
                                         valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa))) {
-                                    System.out.println("Se actulizado el valor de las acciones de " + nombreEmpresa +
-                                            " el nuevo valor del paquete es" + paquete.getValorPaquete());
+                                    paquete.actualizarPaqueteValor(valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa)));
+                                    System.out.println("Se actualizado el valor de las acciones de " + nombreEmpresa +
+                                            " el nuevo valor del paquete es " + paquete.getValorPaquete());
                                     numPaquetesActualizados++;
                                 } else {
                                     numPaquetesNoActualizados++;
                                 }
+
                             } catch (PaqueteNoEnContradoExcepcion e) {
                                 numPaquetesNoActualizados++;
                                 //Si no existe el paquete pasamos a la siguiente empresa(siguiente iteracion del for each)
@@ -217,8 +246,16 @@ public class Banco {
             }
         }
 
-        public String toString(){
-            return "Nombre Banco: " + this.nombre + ", Listado de clientes: \n" + this.clientes.toString();
+    private Cliente buscarClienteNombre(String nombreCliente) throws ClienteNoEncontradoExcepcion {
+        Iterator<Cliente> itr = clientes.iterator();
+        boolean encontrado = false;
+        Cliente cliente = null;
+        while(itr.hasNext() && !encontrado){
+            cliente =  itr.next();
+            encontrado = cliente.getNombre().equals(nombreCliente);
         }
+        if (!encontrado) throw new ClienteNoEncontradoExcepcion();
+        else return cliente;
     }
+}
 

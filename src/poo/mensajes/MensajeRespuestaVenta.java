@@ -4,10 +4,10 @@ import java.util.StringJoiner;
 
 public class MensajeRespuestaVenta extends MensajeVenta{
     private boolean operacion;
-    private double precioAccion;
-    private double dineroDevuelto;
+    private Double precioAccion;
+    private Double dineroDevuelto;
 
-    public MensajeRespuestaVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones, boolean operacion,double dineroDevuelto , double precioAccion) {
+    public MensajeRespuestaVenta(int identificador, String nombreCliente,  String nombreEmpresa,int numAcciones, boolean operacion,Double dineroDevuelto , Double precioAccion) {
         super(identificador, nombreCliente,nombreEmpresa,numAcciones);
         this.operacion = operacion;
         this.dineroDevuelto = dineroDevuelto;
@@ -29,11 +29,11 @@ public class MensajeRespuestaVenta extends MensajeVenta{
         return operacion;
     }
 
-    public double getPrecioAccion() {
+    public Double getPrecioAccion() {
         return precioAccion;
     }
 
-    public double getDineroDevuelto() {
+    public Double getDineroDevuelto() {
         return dineroDevuelto;
     }
 }

@@ -1,9 +1,6 @@
 package poo.general;
 
-import poo.Excepciones.NoEsCadenaSinNumeros;
-import poo.Excepciones.NoEsDniExcepcion;
-import poo.Excepciones.NoEsDoubleExcepcion;
-import poo.Excepciones.NoEsEnteroExcepcion;
+import poo.Excepciones.*;
 
 
 import java.util.InputMismatchException;
@@ -66,9 +63,13 @@ public class Escaner {
     }
 
 
-    public String leerCadena() {
-        return sc.nextLine();
+    public String leerCadena() throws CadenaVaciaExcepcion {
+        String cadena = sc.nextLine();
+        if (cadena.isEmpty()) throw new CadenaVaciaExcepcion();
+        return cadena;
     }
 
-
+    public void leerParaContinuar() {
+        sc.nextLine();
+    }
 }

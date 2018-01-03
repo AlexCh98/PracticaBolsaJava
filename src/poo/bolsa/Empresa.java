@@ -4,8 +4,8 @@ import java.io.*;
 
 public class Empresa implements Serializable{
     private String nombreEmpresa;
-    private double valorActual;
-    private double valorPrevio;
+    private Double valorActual;
+    private Double valorPrevio;
 
     public Empresa(String nombreEmpresa) {
         this.nombreEmpresa = nombreEmpresa;
@@ -13,12 +13,12 @@ public class Empresa implements Serializable{
         //this.valorPrevio=0;
     }
 
-    public Empresa(String nombreEmpresa, double valorActual, double valorPrevio) {
+    public Empresa(String nombreEmpresa, Double valorActual, Double valorPrevio) {
         this(nombreEmpresa);
         this.valorPrevio=valorPrevio;
         this.valorActual=valorActual;
     }
-    public Empresa(String nombreEmpresa, double valor) {
+    public Empresa(String nombreEmpresa, Double valor) {
         this(nombreEmpresa);
         this.valorPrevio=valor;
         this.valorActual=valor;
@@ -32,33 +32,33 @@ public class Empresa implements Serializable{
         this.nombreEmpresa = nombreEmpresa;
     }
 
-    public double getValorActual() {
+    public Double getValorActual() {
         return valorActual;
     }
 
-    public void setValorActual(double valorActual) {
+    public void setValorActual(Double valorActual) {
         this.valorActual = valorActual;
     }
 
-    public double getValorPrevio() {
+    public Double getValorPrevio() {
         return valorPrevio;
     }
 
-    public void setValorPrevio(double valorPrevio) {
+    public void setValorPrevio(Double valorPrevio) {
         this.valorPrevio = valorPrevio;
     }
 
-    private void calcularValorPrevio (double valor){
+    private void calcularValorPrevio (Double valor){
          this.valorPrevio=valor;
     }
 
-    public void valorActualEmpresa (double valor){ //Actualiza la accion actual y modifica la accion anterior.
+    public void valorActualEmpresa (Double valor){ //Actualiza la accion actual y modifica la accion anterior.
         calcularValorPrevio(this.valorActual);
         this.valorActual=valor;
     }
 
-    public double diferenciaAcciones (){
-        double diferencia=Math.abs(this.valorActual-this.valorPrevio);
+    public Double diferenciaAcciones (){
+        Double diferencia=Math.abs(this.valorActual-this.valorPrevio);
         return diferencia;
     }
 
@@ -66,5 +66,18 @@ public class Empresa implements Serializable{
         return "Nombre: " + this.nombreEmpresa  + ", Valor Actual " + this.valorActual+", Valor Previo "+this.valorPrevio;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Empresa empresa = (Empresa) o;
+
+        return nombreEmpresa.equals(empresa.nombreEmpresa);
+    }
+
+    @Override
+    public int hashCode() {
+        return nombreEmpresa.hashCode();
+    }
 }

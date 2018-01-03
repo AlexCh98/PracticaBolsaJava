@@ -1,8 +1,6 @@
 package poo.banco;
 
-import poo.Excepciones.EmpresaNoEncontradaExcepcion;
-import poo.Excepciones.FormatoNoValidoExcepcion;
-import poo.Excepciones.NoSePuedeComprarAccionesExcepcion;
+import poo.Excepciones.*;
 import poo.bolsa.BolsaDeValores;
 import poo.general.Utilidades;
 import poo.mensajes.*;
@@ -11,37 +9,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class AgenteDeInversiones {
-    private Banco banco;
     private BolsaDeValores bolsa;
     private ArrayList<Mensaje> listaPeticiones;
 
-    public AgenteDeInversiones(Banco banco,BolsaDeValores bolsa) {
-        this.banco=banco;
-        this.bolsa=bolsa;
-        this.listaPeticiones = new ArrayList<>();
-    }
     public AgenteDeInversiones(BolsaDeValores bolsa) {
         this.bolsa=bolsa;
         this.listaPeticiones = new ArrayList<>();
     }
+
     public void almacenarMensaje(Mensaje mensaje){
         this.listaPeticiones.add(mensaje);
     }
 
 
-    public void empiezaTrabajar()throws FormatoNoValidoExcepcion,EmpresaNoEncontradaExcepcion,NoSePuedeComprarAccionesExcepcion{
+    public void empiezaTrabajar(Banco banco) throws EmpresaNoEncontradaExcepcion, NoSePuedeComprarAccionesExcepcion, ClienteNoEncontradoExcepcion, VentaNoRealizadaExcepcion, CompraNoRealizadaExcepcion {
         ArrayList<Mensaje> peticiones = this.listaPeticiones;
 
         for (Mensaje peticion: peticiones){
             if (peticion.getTipo().equals("actualizacion")){
-                System.out.println(elaborarMensajeRespuestaActualizacion(ejecutarSolicitudActualizacion(peticion)));
+                banco.actualizarCliente(elaborarMensajeRespuestaActualizacion(ejecutarSolicitudActualizacion(peticion)));
 
             }else{
-                System.out.println(elaborarMensajeRespuestaCompraVenta(ejecutarSolicitud(peticion)));
+                banco.actualizarCliente(elaborarMensajeRespuestaCompraVenta(ejecutarSolicitud(peticion)));
             }
         }
-
-        System.out.println("HE TERMINADO DE TRABAJAR!");
+        this.listaPeticiones.clear();
+        System.out.println("" +
+                "HE TERMINADO DE TRABAJAR!");
     }
 
 
@@ -49,7 +43,7 @@ public class AgenteDeInversiones {
         return this.bolsa.realizarOperacion(peticion.toString(),peticion.getTipo());
     }
 
-    public String ejecutarSolicitudActualizacion(Mensaje peticion) throws FormatoNoValidoExcepcion, EmpresaNoEncontradaExcepcion {
+    public String ejecutarSolicitudActualizacion(Mensaje peticion) {
             return this.bolsa.realizarOperacionActualizacion(peticion.toString());
     }
 
@@ -61,8 +55,8 @@ public class AgenteDeInversiones {
         String[] cadenaValorActualEmpresa = fields[3].split(",");
 
         ArrayList<String> arrayNombres = Utilidades.pasarStringArray(cadenaNombresEmpresa);
-        ArrayList<Double> arrayValorPrevio = Utilidades.pasarStringArray(cadenaValorPrevioEmpresa);
-        ArrayList<Double> arrayValorActual = Utilidades.pasarStringArray(cadenaValorActualEmpresa);
+        ArrayList<Double> arrayValorPrevio =  Utilidades.pasarStringArrayDouble(cadenaValorPrevioEmpresa);
+        ArrayList<Double> arrayValorActual =  Utilidades.pasarStringArrayDouble(cadenaValorActualEmpresa);
         return new MensajeRespuestaActualizacion(identificador, arrayNombres,arrayValorPrevio,arrayValorActual);
     }
 
@@ -70,15 +64,15 @@ public class AgenteDeInversiones {
 
         String[] fields = mensaje.split("\\|");
         Boolean realizadaoperacion = false;
-        double dineroAccion = 0;
-        double dineroSobranteDevuelto = 0;
+        Double dineroAccion = 0.0;
+        Double dineroSobranteDevuelto = 0.0;
         int identificador = Integer.parseInt(fields[0]);
         String nombreCliente = fields[1];
         String nombreEmpresa = fields[2];
         if (fields.length == 8) {//MensajeRespuestaCompra
-            double dineroTotal = Double.parseDouble(fields[3]);
-            realizadaoperacion = Boolean.parseBoolean(fields[4]);
-            int numAccionesCompradas = Integer.parseInt(fields[5]);
+            Double dineroTotal = Double.parseDouble(fields[3]);
+            realizadaoperacion = Boolean.parseBoolean(fields[5]);
+            int numAccionesCompradas = Integer.parseInt(fields[4]);
             dineroAccion = Double.parseDouble(fields[6]);
             dineroSobranteDevuelto = Double.parseDouble(fields[7]);
             Mensaje mensajeRespuesta = new MensajeRespuestaCompra(identificador, nombreCliente, nombreEmpresa, dineroTotal, realizadaoperacion, numAccionesCompradas, dineroAccion, dineroSobranteDevuelto);

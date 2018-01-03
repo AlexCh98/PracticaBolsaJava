@@ -11,13 +11,15 @@ public class MensajeRespuestaActualizacion extends MensajeActualizacion{
 
     public MensajeRespuestaActualizacion(int identificador, ArrayList<String> nombresEmpresas, ArrayList<Double> valoresEmpresas,ArrayList<Double> valoresPreviosEmpresas){
         super(identificador);
+        this.nombresEmpresas = new ArrayList<>();
+        this.valoresEmpresas = new ArrayList<>();
+        this.valoresPreviosEmpresas = new ArrayList<>();
         this.nombresEmpresas = nombresEmpresas;
         this.valoresEmpresas = valoresEmpresas;
         this.valoresPreviosEmpresas = valoresPreviosEmpresas;
     }
 
     public String toString(){
-
         StringBuilder sbNombresEmpresas = new StringBuilder("");
         for(String s : this.nombresEmpresas){
             sbNombresEmpresas.append(s);

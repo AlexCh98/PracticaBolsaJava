@@ -1,30 +1,28 @@
 package poo.general;
 
 
-import poo.Excepciones.FormatoNoValidoExcepcion;
 import poo.bolsa.Empresa;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringJoiner;
 
 public class Utilidades {
 
 
     public static double numeroAleatorio(){
-        return Math.random();
+        return redondearDecimales(Math.random()*10000 , 0);
     }
 
-    public static Object[] deserializar (String mensaje, int longitud,String tipo) throws FormatoNoValidoExcepcion {
+    public static Object[] deserializar (String mensaje, int longitud,String tipo) {
 
         String[] fields = mensaje.split("\\|");
 
 
         Object[] camposMensaje = new Object[longitud];
-        if (fields.length<longitud) throw new FormatoNoValidoExcepcion();
+
         int i=longitud;
         int d=0;
-        try{
+
             camposMensaje[0] = Integer.parseInt(fields[0]);
             camposMensaje[1] = fields[1];
             camposMensaje[2] = fields[2];
@@ -35,9 +33,7 @@ public class Utilidades {
                     camposMensaje[3]=Integer.parseInt(fields[3]);
                 }
             }
-        } catch (NumberFormatException e){
-            throw new FormatoNoValidoExcepcion();
-        }
+
         return camposMensaje;
     }
     public static String toString (ArrayList<Object> array) {
@@ -99,14 +95,24 @@ public class Utilidades {
         resultado=(resultado/Math.pow(10, numeroDecimales))+parteEntera;
         return resultado;
     }
-    public static ArrayList pasarStringArray(String[] cadena){
+    public static ArrayList<String> pasarStringArray(String[] cadena){
         int contadorNombres = cadena.length;
         int i =0;
-        ArrayList<Object> arrayNombres = new ArrayList<>();
+        ArrayList<String> arrayNombres = new ArrayList<>();
         while (i<contadorNombres){
             arrayNombres.add(cadena[i]);
             i++;
         }
         return arrayNombres;
+    }
+    public static ArrayList<Double> pasarStringArrayDouble(String[] cadena){
+        int contadorValores = cadena.length;
+        int i =0;
+        ArrayList<Double> arrayValores = new ArrayList<>();
+        while (i<contadorValores){
+            arrayValores.add(Double.parseDouble(cadena[i]));
+            i++;
+        }
+        return arrayValores;
     }
 }

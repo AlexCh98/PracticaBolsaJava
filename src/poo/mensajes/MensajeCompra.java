@@ -5,10 +5,10 @@ import java.util.StringJoiner;
 
 public class MensajeCompra extends Mensaje {
     protected String nombreCliente;
-    protected double dinero;
+    protected Double dinero;
     protected String nombreEmpresa;
 
-    public MensajeCompra(int identificador, String nombreCliente, String nombreEmpresa, double dinero) {
+    public MensajeCompra(int identificador, String nombreCliente, String nombreEmpresa, Double dinero) {
         super(identificador);
         this.nombreCliente = nombreCliente;
         this.nombreEmpresa = nombreEmpresa;
@@ -32,7 +32,7 @@ public class MensajeCompra extends Mensaje {
         return nombreCliente;
     }
 
-    public double getDinero() {
+    public Double getDinero() {
         return dinero;
     }
 

@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class PaqueteDeAcciones implements Serializable{
     private String nombreEmpresa;
     private int numeroDeAcciones;
-    private double valorPaquete;
+    private Double valorPaquete;
 
-    public PaqueteDeAcciones(String nombreEmpresa, int numeroDeAcciones, double precioCompra) {
+    public PaqueteDeAcciones(String nombreEmpresa, int numeroDeAcciones, Double precioCompra) {
         this.nombreEmpresa = nombreEmpresa;
         this.numeroDeAcciones = numeroDeAcciones;
         this.valorPaquete = numeroDeAcciones * precioCompra;
@@ -17,25 +17,25 @@ public class PaqueteDeAcciones implements Serializable{
         return nombreEmpresa;
     }
 
-    public double getNumeroDeAcciones() {
+    public int getNumeroDeAcciones() {
         return numeroDeAcciones;
     }
 
-    public double getValorPaquete() {
+    public Double getValorPaquete() {
         return valorPaquete;
     }
 
-    public void actualizarPaqueteCompra(int numeroDeAcciones, double precioCompra){
+    public void actualizarPaqueteCompra(int numeroDeAcciones, Double precioCompra){
         this.numeroDeAcciones = this.numeroDeAcciones + numeroDeAcciones;
         this.valorPaquete = numeroDeAcciones * precioCompra;
     }
 
-    public void actualizarPaqueteVenta(int numeroDeAcciones, double precioVenta){
+    public void actualizarPaqueteVenta(int numeroDeAcciones, Double precioVenta){
         this.numeroDeAcciones = this.numeroDeAcciones - numeroDeAcciones;
         this.valorPaquete = this.valorPaquete - this.numeroDeAcciones * precioVenta;
     }
 
-    public void actulizarPaqueteValor(double precioActulizado){
+    public void actualizarPaqueteValor(Double precioActulizado){
         this.valorPaquete = this.numeroDeAcciones * precioActulizado;
     }
 
