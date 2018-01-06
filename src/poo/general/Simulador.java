@@ -16,10 +16,10 @@ public class Simulador {
         Empresa empresa5 = new Empresa("Santander", 1020.0, 2020.0);
         BolsaDeValores bolsa = new BolsaDeValores("Bolsa de Madrid", empresa1);
         try {
-            bolsa.añadirEmpresa(empresa2);
-            bolsa.añadirEmpresa(empresa3);
-            bolsa.añadirEmpresa(empresa4);
-            bolsa.añadirEmpresa(empresa5);
+            bolsa.anadirEmpresa(empresa2);
+            bolsa.anadirEmpresa(empresa3);
+            bolsa.anadirEmpresa(empresa4);
+            bolsa.anadirEmpresa(empresa5);
         } catch (EmpresaRepetidaExcepcion e) {
             //En teoria nunga deberia llegar aqui
             System.out.println("Error en la declaracion de datos de ejemplo");
@@ -190,7 +190,7 @@ public class Simulador {
                             System.out.println("Introduzca valor de la empresa");
                             valor9 = escaner.leerDouble();
                             nuevoEmpresa9 = new Empresa(nombre9, valor9);
-                            bolsa.añadirEmpresa(nuevoEmpresa9);
+                            bolsa.anadirEmpresa(nuevoEmpresa9);
                             sinError9 = true;
                         } catch (CadenaVaciaExcepcion |EmpresaRepetidaExcepcion | NoEsDoubleExcepcion e) {
                             System.out.println(e.getMessage());

@@ -25,7 +25,7 @@ public class BolsaDeValores {
         this.listaEmpresas.add(empresa);
     }
 
-    public void añadirEmpresa(Empresa empresa) throws EmpresaRepetidaExcepcion {
+    public void anadirEmpresa(Empresa empresa) throws EmpresaRepetidaExcepcion {
         if(this.listaEmpresas.contains(empresa)) throw new EmpresaRepetidaExcepcion();
         this.listaEmpresas.add(empresa);
     }
