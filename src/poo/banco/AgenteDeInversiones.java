@@ -17,20 +17,32 @@ public class AgenteDeInversiones {
         this.listaPeticiones = new ArrayList<>();
     }
 
+    public ArrayList<Mensaje> getListaPeticiones() {
+        return listaPeticiones;
+    }
+
+    public void setListaPeticiones(ArrayList<Mensaje> listaPeticiones) {
+        this.listaPeticiones = listaPeticiones;
+    }
+
     public void almacenarMensaje(Mensaje mensaje){
         this.listaPeticiones.add(mensaje);
     }
 
 
-    public void empiezaTrabajar(Banco banco) throws EmpresaNoEncontradaExcepcion, NoSePuedeComprarAccionesExcepcion, ClienteNoEncontradoExcepcion, VentaNoRealizadaExcepcion, CompraNoRealizadaExcepcion {
+    public void empiezaTrabajar(Banco banco) throws NoSePuedeComprarAccionesExcepcion, ClienteNoEncontradoExcepcion, VentaNoRealizadaExcepcion, CompraNoRealizadaExcepcion {
         ArrayList<Mensaje> peticiones = this.listaPeticiones;
 
         for (Mensaje peticion: peticiones){
             if (peticion.getTipo().equals("actualizacion")){
                 banco.actualizarCliente(elaborarMensajeRespuestaActualizacion(ejecutarSolicitudActualizacion(peticion)));
-
             }else{
-                banco.actualizarCliente(elaborarMensajeRespuestaCompraVenta(ejecutarSolicitud(peticion)));
+                try{
+                    banco.actualizarCliente(elaborarMensajeRespuestaCompraVenta(ejecutarSolicitud(peticion)));
+                }catch (VentaNoRealizadaExcepcion | CompraNoRealizadaExcepcion e){
+                    this.listaPeticiones.remove(e);
+                    System.out.println("Error Al realizar la operación con identificador: "+ peticion.getIdentificador()+", del tipo: "+peticion.getTipo());
+                }
             }
         }
         this.listaPeticiones.clear();
@@ -88,9 +100,11 @@ public class AgenteDeInversiones {
     }
 
     public void imprimirPeticionesPendientes(){
+        if (this.listaPeticiones.size()==0) System.out.println("No hay peticiones Pendientes");
         for(Mensaje m : this.listaPeticiones){
             System.out.println(m.toString());
         }
+
     }
 
 }
