@@ -13,29 +13,6 @@ public class Utilidades {
         return redondearDecimales(Math.random()*10000 , 0);
     }
 
-    public static Object[] deserializar (String mensaje, int longitud,String tipo) {
-
-        String[] fields = mensaje.split("\\|");
-
-
-        Object[] camposMensaje = new Object[longitud];
-
-        int i=longitud;
-        int d=0;
-
-            camposMensaje[0] = Integer.parseInt(fields[0]);
-            camposMensaje[1] = fields[1];
-            camposMensaje[2] = fields[2];
-            if (longitud==4){
-                if (tipo=="Compra"){
-                    camposMensaje[3]=Double.parseDouble(fields[3]);
-                }else {
-                    camposMensaje[3]=Integer.parseInt(fields[3]);
-                }
-            }
-
-        return camposMensaje;
-    }
     public static String toString (ArrayList<Object> array) {
         StringJoiner sj = new StringJoiner("|");
         for (Object object : array) {

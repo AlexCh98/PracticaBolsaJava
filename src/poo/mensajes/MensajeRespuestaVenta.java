@@ -20,6 +20,7 @@ public class MensajeRespuestaVenta extends MensajeVenta{
         sj.add(Integer.toString(this.identificador));
         sj.add(this.nombreCliente);
         sj.add(Boolean.toString(this.operacion));
+        sj.add(Integer.toString(this.accionesVenta));
         sj.add(Double.toString(this.dineroDevuelto));
         sj.add(Double.toString(this.precioAccion));
         return sj.toString();

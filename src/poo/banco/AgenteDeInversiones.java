@@ -1,12 +1,18 @@
 package poo.banco;
 
-import poo.Excepciones.*;
+import poo.Excepciones.ClienteNoEncontradoExcepcion;
+import poo.Excepciones.CompraNoRealizadaExcepcion;
+import poo.Excepciones.NoSePuedeComprarAccionesExcepcion;
+import poo.Excepciones.VentaNoRealizadaExcepcion;
 import poo.bolsa.BolsaDeValores;
 import poo.general.Utilidades;
-import poo.mensajes.*;
+import poo.mensajes.Mensaje;
+import poo.mensajes.MensajeRespuestaActualizacion;
+import poo.mensajes.MensajeRespuestaCompra;
+import poo.mensajes.MensajeRespuestaVenta;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 
 public class AgenteDeInversiones {
     private BolsaDeValores bolsa;
@@ -17,15 +23,8 @@ public class AgenteDeInversiones {
         this.listaPeticiones = new ArrayList<>();
     }
 
-    public ArrayList<Mensaje> getListaPeticiones() {
-        return listaPeticiones;
-    }
 
-    public void setListaPeticiones(ArrayList<Mensaje> listaPeticiones) {
-        this.listaPeticiones = listaPeticiones;
-    }
-
-    public void almacenarMensaje(Mensaje mensaje){
+    void almacenarMensaje(Mensaje mensaje){
         this.listaPeticiones.add(mensaje);
     }
 
@@ -40,7 +39,7 @@ public class AgenteDeInversiones {
                 try{
                     banco.actualizarCliente(elaborarMensajeRespuestaCompraVenta(ejecutarSolicitud(peticion)));
                 }catch (VentaNoRealizadaExcepcion | CompraNoRealizadaExcepcion e){
-                    this.listaPeticiones.remove(e);
+                    this.listaPeticiones.remove(peticion);
                     System.out.println("Error Al realizar la operación con identificador: "+ peticion.getIdentificador()+", del tipo: "+peticion.getTipo());
                 }
             }
@@ -51,15 +50,15 @@ public class AgenteDeInversiones {
     }
 
 
-    public String ejecutarSolicitud(Mensaje peticion){
+    private String ejecutarSolicitud(Mensaje peticion){
         return this.bolsa.realizarOperacion(peticion.toString(),peticion.getTipo());
     }
 
-    public String ejecutarSolicitudActualizacion(Mensaje peticion) {
+    String ejecutarSolicitudActualizacion(Mensaje peticion) {
             return this.bolsa.realizarOperacionActualizacion(peticion.toString());
     }
 
-    public MensajeRespuestaActualizacion elaborarMensajeRespuestaActualizacion(String mensaje){
+    MensajeRespuestaActualizacion elaborarMensajeRespuestaActualizacion(String mensaje){
         String[] fields = mensaje.split("\\|");
         int identificador = Integer.parseInt(fields[0]);
         String[] cadenaNombresEmpresa = fields[1].split(",");
@@ -72,12 +71,12 @@ public class AgenteDeInversiones {
         return new MensajeRespuestaActualizacion(identificador, arrayNombres,arrayValorPrevio,arrayValorActual);
     }
 
-    public Mensaje elaborarMensajeRespuestaCompraVenta(String mensaje) {
+    private Mensaje elaborarMensajeRespuestaCompraVenta(String mensaje) {
 
         String[] fields = mensaje.split("\\|");
-        Boolean realizadaoperacion = false;
-        Double dineroAccion = 0.0;
-        Double dineroSobranteDevuelto = 0.0;
+        Boolean realizadaoperacion;
+        Double dineroAccion;
+        Double dineroSobranteDevuelto;
         int identificador = Integer.parseInt(fields[0]);
         String nombreCliente = fields[1];
         String nombreEmpresa = fields[2];
@@ -87,15 +86,14 @@ public class AgenteDeInversiones {
             int numAccionesCompradas = Integer.parseInt(fields[4]);
             dineroAccion = Double.parseDouble(fields[6]);
             dineroSobranteDevuelto = Double.parseDouble(fields[7]);
-            Mensaje mensajeRespuesta = new MensajeRespuestaCompra(identificador, nombreCliente, nombreEmpresa, dineroTotal, realizadaoperacion, numAccionesCompradas, dineroAccion, dineroSobranteDevuelto);
-            return mensajeRespuesta;
+            return new MensajeRespuestaCompra(identificador, nombreCliente, nombreEmpresa, dineroTotal, realizadaoperacion, numAccionesCompradas, dineroAccion, dineroSobranteDevuelto);
         } else {
             int numAcciones = Integer.parseInt(fields[3]);
             realizadaoperacion = Boolean.parseBoolean(fields[4]);
             dineroSobranteDevuelto = Double.parseDouble(fields[5]);
             dineroAccion = Double.parseDouble(fields[6]);
-            Mensaje mensajeRespuesta = new MensajeRespuestaVenta(identificador, nombreCliente, nombreEmpresa, numAcciones, realizadaoperacion, dineroSobranteDevuelto, dineroAccion);
-            return mensajeRespuesta;
+
+            return new MensajeRespuestaVenta(identificador, nombreCliente, nombreEmpresa, numAcciones, realizadaoperacion, dineroSobranteDevuelto, dineroAccion);
         }
     }
 

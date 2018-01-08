@@ -1,7 +1,6 @@
 package poo.banco;
 
 public class ClientePremium extends Cliente{
-
     private GestorInversiones gestorInversiones;
 
 
@@ -17,7 +16,7 @@ public class ClientePremium extends Cliente{
                 "\n Nombre Gestor: " + this.gestorInversiones.getNombre();
     }
 
-    public GestorInversiones getGestorInversiones() {
+    GestorInversiones getGestorInversiones() {
         return gestorInversiones;
     }
 }

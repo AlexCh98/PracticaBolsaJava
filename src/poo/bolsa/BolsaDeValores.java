@@ -4,20 +4,17 @@ package poo.bolsa;
 import poo.Excepciones.*;
 import poo.general.Utilidades;
 
-import javax.swing.text.html.HTMLDocument;
-
-import static poo.general.Utilidades.*;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.StringJoiner;
+
+import static poo.general.Utilidades.*;
 
 
 
 public class BolsaDeValores {
-    public String nombreBolsa;
-    public ArrayList<Empresa> listaEmpresas;
+    private String nombreBolsa;
+    private ArrayList<Empresa> listaEmpresas;
 
     public BolsaDeValores(String nombre,Empresa empresa) {
         this.nombreBolsa = nombre;
@@ -168,7 +165,7 @@ public class BolsaDeValores {
     public String realizarOperacionActualizacion(String mensaje) {
         String[] fields = mensaje.split("\\|");
 
-        int identificador = 0;
+        int identificador;
         identificador = Integer.parseInt(fields[0]);
 
         ArrayList<Object> arrayDatosEmpresa = obtenerDatosEmpresas(this.listaEmpresas);
@@ -195,7 +192,7 @@ public class BolsaDeValores {
         return empresa;
     }
 
-    public Object[] calcularNumTitulo(Double dinero,Double valorActual) throws NoSePuedeComprarAccionesExcepcion {
+    private Object[] calcularNumTitulo(Double dinero, Double valorActual) throws NoSePuedeComprarAccionesExcepcion {
 
         Double cociente=(dinero/valorActual);
 

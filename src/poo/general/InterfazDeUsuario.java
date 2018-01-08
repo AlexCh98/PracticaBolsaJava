@@ -3,12 +3,10 @@ package poo.general;
 import poo.Excepciones.FueraRangoExcepcion;
 import poo.Excepciones.NoEsEnteroExcepcion;
 
-import java.io.IOException;
-
-public class InterfazDeUsuario {
+class InterfazDeUsuario {
 
 
-    public int getOpcion() {
+    int getOpcion() {
         int opcion = 0;
         boolean sinError = false;
         do{
@@ -25,7 +23,7 @@ public class InterfazDeUsuario {
         return opcion;
     }
 
-    public void imprimirMenu(){
+    void imprimirMenu(){
         System.out.println("0.- Salir");
         System.out.println("------------ESTADO------------");
         System.out.println("1.- Imprimir estado de los clientes");

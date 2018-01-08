@@ -1,17 +1,6 @@
 package poo;
 
-import poo.Excepciones.ClienteYaEstaExcepcion;
-import poo.Excepciones.EmpresaRepetidaExcepcion;
-import poo.banco.*;
-import poo.bolsa.BolsaDeValores;
-import poo.bolsa.Empresa;
-import poo.general.*;
-import poo.mensajes.MensajeActualizacion;
-import poo.mensajes.MensajeRespuestaActualizacion;
-import poo.mensajes.MensajeRespuestaCompra;
-
-import java.util.ArrayList;
-import java.util.Iterator;
+import poo.general.Simulador;
 
 public class Main {
 

@@ -1,6 +1,6 @@
 package poo.bolsa;
 
-import java.io.*;
+import java.io.Serializable;
 
 public class Empresa implements Serializable{
     private String nombreEmpresa;
@@ -36,31 +36,24 @@ public class Empresa implements Serializable{
         return valorActual;
     }
 
-    public void setValorActual(Double valorActual) {
-        this.valorActual = valorActual;
-    }
+
 
     public Double getValorPrevio() {
         return valorPrevio;
     }
 
-    public void setValorPrevio(Double valorPrevio) {
-        this.valorPrevio = valorPrevio;
-    }
+
 
     private void calcularValorPrevio (Double valor){
          this.valorPrevio=valor;
     }
 
-    public void valorActualEmpresa (Double valor){ //Actualiza la accion actual y modifica la accion anterior.
+    void valorActualEmpresa(Double valor){ //Actualiza la accion actual y modifica la accion anterior.
         calcularValorPrevio(this.valorActual);
         this.valorActual=valor;
     }
 
-    public Double diferenciaAcciones (){
-        Double diferencia=Math.abs(this.valorActual-this.valorPrevio);
-        return diferencia;
-    }
+
 
     public String toString (){
         return "Nombre: " + this.nombreEmpresa  + ", Valor Actual " + this.valorActual+", Valor Previo "+this.valorPrevio;

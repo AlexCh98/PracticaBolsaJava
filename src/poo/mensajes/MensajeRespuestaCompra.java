@@ -1,7 +1,5 @@
 package poo.mensajes;
 
-import poo.bolsa.Empresa;
-
 import java.util.StringJoiner;
 
 public class MensajeRespuestaCompra extends MensajeCompra{

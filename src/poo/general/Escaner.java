@@ -2,23 +2,22 @@ package poo.general;
 
 import poo.Excepciones.*;
 
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Escaner {
+class Escaner {
     private Scanner sc;
 
 
 
-    public Escaner (){
+    Escaner(){
         this.sc = new Scanner(System.in);
         sc.useDelimiter("\\R");
     }
 
-    public int leerEntero () throws NoEsEnteroExcepcion{
-        int entero = 0;
+    int leerEntero() throws NoEsEnteroExcepcion{
+        int entero;
         try {
             entero = sc.nextInt();
         } catch (InputMismatchException e) {
@@ -27,8 +26,8 @@ public class Escaner {
         }
         return entero;
     }
-    public double leerDouble () throws NoEsDoubleExcepcion {
-        double doble = 0;
+    double leerDouble() throws NoEsDoubleExcepcion {
+        double doble;
         try {
             doble = sc.nextDouble();
         } catch (InputMismatchException e) {
@@ -38,7 +37,7 @@ public class Escaner {
         return doble;
     }
 
-    public String leerCadenaSinNumeros() throws NoEsCadenaSinNumeros {
+    String leerCadenaSinNumeros() throws NoEsCadenaSinNumeros {
         String cadena;
         cadena = sc.nextLine();
         try{
@@ -50,7 +49,7 @@ public class Escaner {
         return cadena;
     }
 
-    public String leerDni() throws NoEsDniExcepcion{
+    String leerDni() throws NoEsDniExcepcion{
         String cadena;
         cadena = sc.nextLine();
         try{
@@ -63,13 +62,13 @@ public class Escaner {
     }
 
 
-    public String leerCadena() throws CadenaVaciaExcepcion {
+    String leerCadena() throws CadenaVaciaExcepcion {
         String cadena = sc.nextLine();
         if (cadena.isEmpty()) throw new CadenaVaciaExcepcion();
         return cadena;
     }
 
-    public void leerParaContinuar() {
+    void leerParaContinuar() {
         sc.nextLine();
     }
 }

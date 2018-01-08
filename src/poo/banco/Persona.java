@@ -26,14 +26,12 @@ public class Persona implements Serializable{
 
         Persona persona = (Persona) o;
 
-        return getNombre().equals(persona.getNombre()) && getDni().equals(persona.getDni());
+        return getDni().equals(persona.getDni());
     }
 
     @Override
     public int hashCode() {
-        int result = getNombre().hashCode();
-        result = 31 * result + getDni().hashCode();
-        return result;
+        return getDni().hashCode();
     }
 
     @Override

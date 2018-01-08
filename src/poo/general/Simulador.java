@@ -1,8 +1,9 @@
 package poo.general;
 
-import poo.banco.*;
-import poo.bolsa.*;
 import poo.Excepciones.*;
+import poo.banco.*;
+import poo.bolsa.BolsaDeValores;
+import poo.bolsa.Empresa;
 
 import java.io.IOException;
 
@@ -61,9 +62,9 @@ public class Simulador {
                     //Añadir cliente
                     boolean sinError3 = false;
                     Cliente nuevoCliente3 = null;
-                    String nombre3 = null;
-                    String dni3 = null;
-                    Double saldo3 = 0.0;
+                    String nombre3;
+                    String dni3;
+                    Double saldo3;
                     do {
                         System.out.println("Introduzca datos del cliente");
                         Escaner escaner = new Escaner();
@@ -87,7 +88,7 @@ public class Simulador {
                 case 4:
                     //Eliminar cliente
                     boolean sinError4 = false;
-                    String dni4 = null;
+                    String dni4;
                     Cliente clienteEliminar = null;
                     do {
                         System.out.println("Introduzca datos del cliente");
@@ -134,9 +135,9 @@ public class Simulador {
                 case 7:
                     //Mejorar cliente a premium
                     boolean sinError7 = false;
-                    String dniCliente7 = null;
-                    String nombreGestor7 = null;
-                    String dniGestor7 = null;
+                    String dniCliente7;
+                    String nombreGestor7;
+                    String dniGestor7;
                     Cliente clienteSubirPremium = null;
                     do {
                         System.out.println("Introduzca datos del cliente");
@@ -162,7 +163,7 @@ public class Simulador {
                 case 8:
                     //Solicitar recomendacion de inversion
                     boolean sinError8 = false;
-                    String dniCliente8 = null;
+                    String dniCliente8;
                     do {
                         System.out.println("Introduzca datos del cliente");
                         Escaner escaner = new Escaner();
@@ -181,8 +182,8 @@ public class Simulador {
                     //Añadir empresa a la bolsa
                     boolean sinError9 = false;
                     Empresa nuevoEmpresa9 = null;
-                    String nombre9 = null;
-                    Double valor9 = 0.0;
+                    String nombre9;
+                    Double valor9;
                     do {
                         System.out.println("Introduzca datos de la empresa");
                         Escaner escaner = new Escaner();
@@ -204,7 +205,7 @@ public class Simulador {
                 case 10:
                     //Eliminar empresa
                     boolean sinError10 = false;
-                    String nombre10 = null;
+                    String nombre10;
                     Empresa empresaEliminar = null;
                     do {
                         System.out.println("Introduzca datos de la empresa");
@@ -255,9 +256,9 @@ public class Simulador {
                 case 14:
                     //Solicitar compra de acciones
                     boolean sinError14 = false;
-                    String dniCliente14 = null;
-                    String nombreEmpresa14 = null;
-                    Double gastoMaximo14 = 0.0;
+                    String dniCliente14;
+                    String nombreEmpresa14;
+                    Double gastoMaximo14;
                     do {
                         System.out.println("Introduzca datos del cliente y de la empresa");
                         Escaner escaner = new Escaner();
@@ -280,9 +281,9 @@ public class Simulador {
                 case 15:
                     //Solicitar venta de acciones
                     boolean sinError15 = false;
-                    String dniCliente15 = null;
-                    String nombreEmpresa15 = null;
-                    int numAcciones15 = 0;
+                    String dniCliente15;
+                    String nombreEmpresa15;
+                    int numAcciones15;
                     do {
                         System.out.println("Introduzca datos del cliente y de la empresa");
                         Escaner escaner = new Escaner();

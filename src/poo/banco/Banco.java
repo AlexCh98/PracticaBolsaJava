@@ -4,7 +4,9 @@ import poo.Excepciones.*;
 import poo.mensajes.*;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 
 public class Banco {
@@ -19,6 +21,12 @@ public class Banco {
         this.agenteDeInversiones = agenteDeInversiones;
     }
     public void anadirCliente(Cliente cliente)throws ClienteYaEstaExcepcion {
+        try {
+            buscarClienteNombre(cliente.getNombre());
+            throw new ClienteYaEstaExcepcion();
+        } catch (ClienteNoEncontradoExcepcion e) {
+            //Si no lo encuentra sigue le programa
+        }
         if (!this.clientes.add(cliente)) throw new ClienteYaEstaExcepcion();
     }
 
@@ -43,10 +51,12 @@ public class Banco {
         } catch (FileNotFoundException e) {
             throw new ArchivoNoEncontradoExcepcion();
         } finally {
-            if(fos!=null) try {
-                fos.close();
-            } catch (IOException e) {
-                throw new ErrorCerrarExcepcion();
+            if(fos!=null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    throw new ErrorCerrarExcepcion();
+                }
             }
         }
     }
@@ -98,17 +108,16 @@ public class Banco {
             throws ClienteNoPremiumExcepcion, ClienteNoEncontradoExcepcion {
         Cliente cliente = buscarCliente(dni);
         if(!(cliente instanceof ClientePremium)) throw  new ClienteNoPremiumExcepcion();
-        String nombreEmpresa = null;
-        nombreEmpresa = ((ClientePremium)cliente).getGestorInversiones().SolicitarRecomendacion(identificador, this.agenteDeInversiones);
+        String nombreEmpresa = ((ClientePremium)cliente).getGestorInversiones().SolicitarRecomendacion(identificador, this.agenteDeInversiones);
         return "Deberias invertir en " + nombreEmpresa;
     }
 
-    public boolean clienteTieneSuficienteSaldo(Cliente cliente, Double saldo) {
+    private boolean clienteTieneSuficienteSaldo(Cliente cliente, Double saldo) {
         return cliente.getSaldo() >= saldo;
     }
 
 
-    public boolean comprobacionPaquete(Cliente cliente, String nombreEmpresa, int numAcciones){
+    private boolean comprobacionPaquete(Cliente cliente, String nombreEmpresa, int numAcciones){
         try {
             PaqueteDeAcciones paquete = cliente.getPaquete(nombreEmpresa);
             return paquete.getNumeroDeAcciones() >= numAcciones;
@@ -149,7 +158,7 @@ public class Banco {
         this.agenteDeInversiones.almacenarMensaje(new MensajeActualizacion(identificador));
     }
 
-    public void actualizarCliente(Mensaje mensaje) throws ClienteNoEncontradoExcepcion, CompraNoRealizadaExcepcion,
+    void actualizarCliente(Mensaje mensaje) throws ClienteNoEncontradoExcepcion, CompraNoRealizadaExcepcion,
             VentaNoRealizadaExcepcion {
         switch (mensaje.getTipo()){
             case "compra":{
@@ -186,6 +195,7 @@ public class Banco {
                     //No llega nunca aqui, se supone que ya se comprobo que el cliente podia vender al realizar el MensajeVenta
                 }
                 //assert paquete != null;
+                assert paquete != null;
                 paquete.actualizarPaqueteVenta(((MensajeRespuestaVenta)mensaje).getAccionesVenta(),
                             ((MensajeRespuestaVenta)mensaje).getPrecioAccion());
                 cliente.setSaldo(cliente.getSaldo() + ((MensajeRespuestaVenta)mensaje).getDineroDevuelto());
@@ -203,7 +213,6 @@ public class Banco {
                 ArrayList<String> nombresEmpresas = ((MensajeRespuestaActualizacion)mensaje).getNombresEmpresas();
                 ArrayList<Double> valoresEmpresas = ((MensajeRespuestaActualizacion)mensaje).getValoresEmpresas();
                 int numPaquetesActualizados = 0;
-                int numPaquetesNoActualizados = 0;
                 int numClientes = 0;
                 for (Cliente cliente : clientes) {
                     System.out.println("Nombre del cliente: " + cliente.getNombre());
@@ -220,18 +229,15 @@ public class Banco {
                                             " el nuevo valor del paquete es " + paquete.getValorPaquete());
                                     numPaquetesActualizados++;
                                 }
+                                numClientes++;
                             } catch (PaqueteNoEnContradoExcepcion e) {
                                 //Si no existe el paquete pasamos a la siguiente empresa(siguiente iteracion del for each)
                             }
                         }
                         if (numPaquetesActualizados == 0) {
                             System.out.println("    No se ha actualizado ningun paquete de este cliente");
-                        } else if (numPaquetesNoActualizados == 0) {
-                            System.out.println("    Se han actualizado todos los paquetes de este cliente");
-                            numClientes++;
                         } else {
-                            System.out.println("    Se han actualizado " + numPaquetesActualizados + " paquetes de acciones");
-                            numClientes++;
+                            System.out.println("    Se han actualizado todos los paquetes de este cliente");
                         }
                     }
                 }

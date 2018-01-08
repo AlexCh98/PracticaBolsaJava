@@ -1,6 +1,5 @@
 package poo.banco;
 
-import poo.Excepciones.EmpresaNoEncontradaExcepcion;
 import poo.mensajes.MensajeActualizacion;
 import poo.mensajes.MensajeRespuestaActualizacion;
 
@@ -12,7 +11,7 @@ public class GestorInversiones  extends Persona{
         super(nombre, dni);
     }
 
-    public String SolicitarRecomendacion(int identificador, AgenteDeInversiones agenteDeInversiones) {
+    String SolicitarRecomendacion(int identificador, AgenteDeInversiones agenteDeInversiones) {
         MensajeActualizacion mensajeActualizacion = new MensajeActualizacion(identificador);
         MensajeRespuestaActualizacion mensajeRespuestaActualizacion = agenteDeInversiones.elaborarMensajeRespuestaActualizacion(
                 agenteDeInversiones.ejecutarSolicitudActualizacion(mensajeActualizacion));
