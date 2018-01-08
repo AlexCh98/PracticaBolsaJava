@@ -208,7 +208,7 @@ public class Banco {
                 for (Cliente cliente : clientes) {
                     System.out.println("Nombre del cliente: " + cliente.getNombre());
                     if (cliente.getCarteraDeAcciones().size() == 0){
-                        System.out.println("El cliente no tiene acciones de ninguna empresa");
+                        System.out.println("    El cliente no tiene acciones de ninguna empresa");
                     }else {
                         for (String nombreEmpresa : nombresEmpresas) {
                             try {
@@ -216,31 +216,26 @@ public class Banco {
                                 if (paquete.getValorPaquete() != paquete.getNumeroDeAcciones() *
                                         valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa))) {
                                     paquete.actualizarPaqueteValor(valoresEmpresas.get(nombreEmpresa.indexOf(nombreEmpresa)));
-                                    System.out.println("Se actualizado el valor de las acciones de " + nombreEmpresa +
+                                    System.out.println("    Se actualizado el valor de las acciones de " + nombreEmpresa +
                                             " el nuevo valor del paquete es " + paquete.getValorPaquete());
                                     numPaquetesActualizados++;
-                                } else {
-                                    numPaquetesNoActualizados++;
                                 }
-
                             } catch (PaqueteNoEnContradoExcepcion e) {
-                                numPaquetesNoActualizados++;
                                 //Si no existe el paquete pasamos a la siguiente empresa(siguiente iteracion del for each)
                             }
                         }
                         if (numPaquetesActualizados == 0) {
-                            System.out.println("No se ha actualizado ningun paquete de este cliente");
+                            System.out.println("    No se ha actualizado ningun paquete de este cliente");
                         } else if (numPaquetesNoActualizados == 0) {
-                            System.out.println("Se han actualizado todos los paquetes de este cliente");
+                            System.out.println("    Se han actualizado todos los paquetes de este cliente");
                             numClientes++;
                         } else {
-                            System.out.println("Se han actualizado " + numPaquetesActualizados + " paquetes de acciones");
-                            System.out.println("No se han actualizado " + numPaquetesNoActualizados + " paquetes de acciones");
+                            System.out.println("    Se han actualizado " + numPaquetesActualizados + " paquetes de acciones");
                             numClientes++;
                         }
                     }
                 }
-                System.out.println("Actualizacion de paquetes de " + numClientes + " clientes");
+                System.out.println("Actualizacion de paquetes de " + numClientes + " cliente/s");
                 System.out.println("Actualizacion de paquetes realizada con exito");
                 break;
             }

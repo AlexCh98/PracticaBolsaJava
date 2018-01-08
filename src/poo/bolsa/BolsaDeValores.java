@@ -124,12 +124,16 @@ public class BolsaDeValores {
                         //Operacion = false
                     }
                 }catch (EmpresaNoEncontradaExcepcion e){
-                    //peracion = false;
+                    //Operacion = false;
                 }finally {
                     array.add(dinero);
                     array.add(accionesCompradas);
                     array.add(operacion);
-                    array.add(empresa.getValorPrevio());
+                    if (operacion) {
+                        array.add(empresa.getValorPrevio());
+                    }else{
+                        array.add(0);
+                    }
                     array.add(dineroSobrante);
                     return Utilidades.toString(array);
                 }
@@ -141,12 +145,16 @@ public class BolsaDeValores {
                     dineroRecibido =empresa.getValorActual()*numAccionesVenta;
                     operacion = true;
                 }catch (EmpresaNoEncontradaExcepcion e){
-                    operacion = false;
+                    //operacion = false;
                 }finally {
                     array.add(numAccionesVenta);
                     array.add(operacion);
                     array.add(dineroRecibido);
-                    array.add(empresa.getValorActual());
+                    if (operacion) {
+                        array.add(empresa.getValorActual());
+                    }else{
+                        array.add(0);
+                    }
                     return Utilidades.toString(array);
                 }
             }

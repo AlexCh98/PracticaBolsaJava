@@ -109,26 +109,28 @@ public class Simulador {
                     //Realizar copia de seguridad
                     try {
                         banco.realizarCopiaSeguridad();
+                        System.out.println("Copia de seguridad realizada correctamente en banco.dat");
                     }catch (ErrorCerrarExcepcion |ErrorSeguridadExcepcion | ArchivoNoEncontradoExcepcion e) {
                         System.out.println(e.getMessage());
                         System.out.println("Error al realizar la Copia");
                     } catch (IOException e) {
                         System.out.println("Error al realizar la Copia");
                     }
-                    System.out.println("Copia de seguridad realizada correctamente en banco.dat");
+
                     break;
                 case 6:
                     //Restaurar copia de seguridad
                     try {
                         banco.restaurarCopiaSeguridad();
+                        System.out.println("Copia de seguridad restaurada correctamente de banco.dat");
+
                     }catch (ErrorCerrarExcepcion |ErrorSeguridadExcepcion | ArchivoNoEncontradoExcepcion | ErrorCastingExcepcion e) {
                         System.out.println(e.getMessage());
                         System.out.println("Error al realizar la Copia");
                     } catch (IOException e) {
                         System.out.println("Error al realizar la Copia");
                     }
-                    System.out.println("Copia de seguridad restaurada correctamente de banco.dat");
-                    break;
+                     break;
                 case 7:
                     //Mejorar cliente a premium
                     boolean sinError7 = false;
@@ -230,25 +232,25 @@ public class Simulador {
                     //Realizar la copia
                     try {
                         bolsa.realizarCopiaSeguridad();
+                        System.out.println("Copia de seguridad realizada correctamente en bolsa.dat");
                     }catch (ErrorCerrarExcepcion |ErrorSeguridadExcepcion | ArchivoNoEncontradoExcepcion e) {
                         System.out.println(e.getMessage());
                         System.out.println("Error al realizar la Copia");
                     } catch (IOException e) {
                         System.out.println("Error al realizar la Copia");
                     }
-                    System.out.println("Copia de seguridad realizada correctamente en bolsa.dat");
                     break;
                 case 13:
                     //Restaurar copia de seguridad
                     try {
                         bolsa.restaurarCopiaSeguridad();
+                        System.out.println("Copia de seguridad restaurada correctamente de bolsa.dat");
                     }catch (ErrorCerrarExcepcion |ErrorSeguridadExcepcion | ArchivoNoEncontradoExcepcion | ErrorCastingExcepcion e) {
                         System.out.println(e.getMessage());
                         System.out.println("Error al realizar la Copia");
                     } catch (IOException e) {
                         System.out.println("Error al realizar la Copia");
                     }
-                    System.out.println("Copia de seguridad restaurada correctamente de bolsa.dat");
                     break;
                 case 14:
                     //Solicitar compra de acciones
@@ -318,14 +320,13 @@ public class Simulador {
                     //Ejecutar operaciones pendientes
                     try {
                         broker.empiezaTrabajar(banco);
-                    } catch ( EmpresaNoEncontradaExcepcion | NoSePuedeComprarAccionesExcepcion
+                    } catch ( NoSePuedeComprarAccionesExcepcion
                             | ClienteNoEncontradoExcepcion | VentaNoRealizadaExcepcion | CompraNoRealizadaExcepcion e) {
                         System.out.println(e.getMessage());
                         System.out.println("Trabajo interrumpido por que hay algun error");
-                        System.out.println("Corregir el error y volver a ponera trabajar al broker");
-                    }
-                    finally {
-                        System.out.println("El broker ha terminado de trabajar");
+                        System.out.println("Corregir el error y volver a poner a trabajar al broker");
+                    }finally {
+                       System.out.println("El broker ha terminado de trabajar");
                     }
                     break;
             }
